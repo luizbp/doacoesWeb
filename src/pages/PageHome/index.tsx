@@ -1,15 +1,33 @@
+import { useState } from 'react';
 import {Link} from 'react-router-dom';
 
 import doacaoImg from '../../assets/images/doacao.svg';
 import logoImg from '../../assets/images/Logo.svg';
 
 import {Button} from '../../components/Button/index';
+import { supabase } from '../../services/supabase';
 
 
 import './index.scss';
 
 
 export function PageHome(){
+
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+
+  const handleLogin = async (email:string) => {
+    try {
+      setLoading(true)
+      const { error } = await supabase.auth.signIn({ email })
+      if (error) throw error
+      alert('Check your email for the login link!')
+    } catch (error) {
+      alert(error.error_description || error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div id="page-auth">
@@ -28,14 +46,18 @@ export function PageHome(){
           <form>
             <input 
               type="text" 
-              placeholder="Usuário"
+              placeholder="E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <input 
-              type="text" 
-              placeholder="Senha"
-            />
-            <Button type="submit">
-              Entrar
+            <Button type="submit"
+              onClick={(e) => {
+                e.preventDefault()
+                handleLogin(email)
+              }}
+              disabled={loading}
+            >
+              {loading ? <span>Aguarde...</span> : <span>Enviar código de acesso</span>}
             </Button>
           </form>
           <p>Se ainda não tem uma conta, <Link to="/cadastro">clique aqui</Link> para se cadastrar </p>
