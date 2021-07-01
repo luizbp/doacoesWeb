@@ -1,5 +1,6 @@
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 
+import { Link } from 'react-router-dom';
 import doacaoImg from '../../assets/images/doacao.svg';
 import logoImg from '../../assets/images/Logo.svg';
 
@@ -9,7 +10,7 @@ import {Button} from '../../components/Button/index';
 import './index.scss';
 
 
-export function Home(){
+export function PageCadastro(){
 
   return (
     <div id="page-auth">
@@ -24,7 +25,12 @@ export function Home(){
       <main>
         <div className="main-content">
           <img src={logoImg} alt="Doação Web" />
+          <h2>Cadastrar-se</h2>
           <form>
+            <input 
+              type="text" 
+              placeholder="E-mail"
+            />
             <input 
               type="text" 
               placeholder="Usuário"
@@ -33,11 +39,15 @@ export function Home(){
               type="text" 
               placeholder="Senha"
             />
+            <input 
+              type="text" 
+              placeholder="Confirme a sua senha"
+            />
             <Button type="submit">
               Entrar
             </Button>
           </form>
-          <p>Se ainda não tem uma conta, clique aqui para se cadastrar </p>
+          <p>Se ja tem uma conta, <Link to="/">clique aqui</Link> para entrar</p>
         </div>
       </main>
     </div>
