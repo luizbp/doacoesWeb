@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button } from "../../components/Button";
+import { useHistory } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import "./index.scss";
 
 export function PageSupabaseHome() {
+  const history = useHistory();
+
   const [loading, setLoading] = useState(false);
 
   const [nomeUsuario, setNomeUsuario] = useState('');
@@ -13,9 +15,24 @@ export function PageSupabaseHome() {
   const [campoDataNascimento, setCampoDataNascimento] = useState('');
 
 
-  useEffect(() =>{
-    getProfile()
-  }, [])
+  useEffect(() => {
+    const validLoggerUser = async () => {
+      let lUser = await supabase.auth.user();
+      console.log("TCL: PageLogin -> session", lUser);
+      if (lUser?.id) {
+        setCampoEmail(lUser?.email || "");
+        return true
+      } else {
+        history.push("/");
+        return false
+      }
+    };
+    validLoggerUser().then((pRetorno) => {
+      if(pRetorno){
+        getProfile()
+      }
+    })
+  }, [history]);
 
   async function getProfile(){
     try{
@@ -23,9 +40,9 @@ export function PageSupabaseHome() {
       const user = supabase.auth.user();
 
       let {data, error, status} = await supabase
-        .from('profiles')
-        .select('username, website, avatar_url')
-        .eq('id', user?.id)
+        .from('users')
+        .select('name')
+        .eq('id_user', user?.id)
         .single();
       
       if(error && status !== 406){
@@ -33,7 +50,7 @@ export function PageSupabaseHome() {
       }
       
       if(data){
-        setNomeUsuario((data.username !== null) ? data.username : 'DELETADO');
+        setNomeUsuario((data.name !== null) ? data.name : 'Não Encontrado');
       }
     }catch(error){
       alert(error.message);
