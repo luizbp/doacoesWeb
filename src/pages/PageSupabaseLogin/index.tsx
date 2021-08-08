@@ -7,7 +7,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import "./index.scss";
 
 export function PageSupabaseLogin() {
-  const [campoEmail, setcampoEmail] = useState("");
+  const [campoEmail, setCampoEmail] = useState("");
+  const [campoPassword, setCampoPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
@@ -49,10 +50,15 @@ export function PageSupabaseLogin() {
   }
 
 
-  const handleLogin = async (email:string) => {
+  const handleLogin = async () => {
     try {
       setLoading(true)
-      const { error } = await supabase.auth.signIn({ email })
+      const { error } = await supabase.auth.signUp(
+        { 
+          email: campoEmail,
+          password: campoPassword,
+        }
+      )
       if (error) throw error
       toast.success(
         'Pronto, agora te enviamos um link de confirmação por e-mail, por favor verifique',
@@ -61,7 +67,7 @@ export function PageSupabaseLogin() {
         }
       )
     } catch (error) {
-      alert(error.error_description || error.message)
+      toast.error(error.error_description || error.message)
     } finally {
       setLoading(false)
     }
@@ -77,14 +83,20 @@ export function PageSupabaseLogin() {
               type="email"
               placeholder="E-mail"
               value={campoEmail}
-              onChange={(e) => setcampoEmail(e.target.value)}
+              onChange={(e) => setCampoEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Senha"
+              value={campoPassword}
+              onChange={(e) => setCampoPassword(e.target.value)}
             />
             <div className="list-buttons">
               <button 
                 className="atualizar"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleLogin(campoEmail)
+                  handleLogin()
                 }
               }
               disabled={loading}

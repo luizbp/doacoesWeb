@@ -58,33 +58,6 @@ export function PageInicial({session} :any){
     }
   }
 
-  async function updateProfile({username, website, avatar_url}:any){
-    try{
-      setLoading(true);
-      const user = supabase.auth.user();
-
-      const updates ={
-        id: user?.id,
-        username, 
-        website, 
-        avatar_url,
-        updated_at: new Date()
-      };
-
-      let {error} = await supabase.from('profiles').upsert(updates,{
-        returning: 'minimal'
-      });
-
-      if(error){
-        throw error;
-      }
-    }catch(error){
-      alert(error.message);
-    }finally{
-      setLoading(false);
-    }
-  }
-
   return (
     <div id="page-auth">
       <aside>
@@ -119,7 +92,7 @@ export function PageInicial({session} :any){
               onChange={(e:any) => setWebsite(e.target.value)}
             />
             <Button 
-              onClick={() => updateProfile({username, website, avatar_url})}
+              // onClick={() => updateProfile({username, website, avatar_url})}
               disabled={loading}
             >
               {loading ? 'Carregando...' : 'Atualizar infos'}

@@ -1,92 +1,112 @@
-import { useEffect, useState } from 'react';
-import {Link, /*useHistory*/} from 'react-router-dom';
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { Link, useHistory /*useHistory*/ } from "react-router-dom";
 
-import doacaoImg from '../../assets/images/doacao.svg';
-import logoImg from '../../assets/images/Logo.svg';
+import doacaoImg from "../../assets/images/doacao.svg";
+import logoImg from "../../assets/images/Logo.svg";
 
-import {Button} from '../../components/Button/index';
-import { supabase } from '../../services/supabase';
+import { Button } from "../../components/Button/index";
+import { IlustracaoInicial } from "../../components/IlustracaoInicial";
+import { supabase } from "../../services/supabase";
 
+import "./index.scss";
 
-import './index.scss';
-
-
-export function PageLogin(){
-  const [session, setSession] = useState<any>(null)
+export function PageLogin() {
+  const [campoEmail, setCampoEmail] = useState("");
+  const [campoPassword, setCampoPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
+  const history = useHistory();
 
-  // const history = useHistory();
   useEffect(() => {
-    setSession(supabase.auth.session())
-    console.log("TCL: PageLogin -> session", session)
+    validLoggerUser().then(() => {
+      // setUser(pUser)
+    });
+  }, []);
 
-    // if(session){
-    //   history.push('/inicial',);
-    // }
-
-  }, [session])
-
-
-  const handleLogin = async (email:string) => {
+  const validLoggerUser = async () => {
     try {
-      setLoading(true)
-      const { error } = await supabase.auth.signIn({ email })
-      if (error) throw error
-      alert('Check your email for the login link!')
+      let lUser = await supabase.auth.user();
+      if (lUser?.id) {
+        let { data, error, status } = await supabase
+          .from("users")
+          .select("name")
+          .eq("id_user", lUser?.id)
+          .single();
+
+        if (error && status !== 406) throw error;
+      }
     } catch (error) {
-      alert(error.error_description || error.message)
+      toast.error(error.error_description || error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
-  async function handleSingOut() {
-    const {erro}:any = await supabase.auth.signOut();
-    if(erro){
-      throw erro;
+  };
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signIn({
+        email: campoEmail,
+        password: campoPassword,
+      });
+      if (error) {
+        toast.error(error.message, {
+          duration: 8000,
+        });
+        return;
+      }
+
+      toast.success(
+        "Pronto, agora te enviamos um link de confirmação por e-mail, por favor verifique",
+        {
+          duration: 8000,
+        }
+      );
+    } catch (error) {
+      alert(error.error_description || error.message);
+    } finally {
+      setLoading(false);
     }
-  }
-  
+  };
 
   return (
     <div id="page-auth">
-      <aside>
-        <img src={doacaoImg} alt="Ilustração simbolizando perguntas e respostas" />
-        <strong>Sistema de controle de Doações Open Source</strong>
-        <p>
-          Aquele que tem caridade no coração tem sempre qualquer coisa para dar.<br/>
-          <b>- Santo Agostinho</b>
-        </p>
-      </aside>
+      <IlustracaoInicial />
       <main>
         <div className="main-content">
           <img src={logoImg} alt="Doação Web" />
           <h2>Entrar</h2>
           <form>
-            <input 
-              type="text" 
+            <input
+              type="email"
               placeholder="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={campoEmail}
+              onChange={(e) => setCampoEmail(e.target.value)}
             />
-            <Button type="submit"
-              onClick={(e:any) => {
-                e.preventDefault()
-                handleLogin(email)
+            <input
+              type="password"
+              placeholder="Senha"
+              value={campoPassword}
+              onChange={(e) => setCampoPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              onClick={(e: any) => {
+                e.preventDefault();
+                handleLogin();
               }}
               disabled={loading}
             >
-              {loading ? <span>Aguarde...</span> : <span>Enviar código de acesso</span>}
-            </Button>
-            <Button
-              onClick={handleSingOut}
-            >
-                
+              {loading ? <span>Aguarde...</span> : <span>Entrar</span>}
             </Button>
           </form>
-          <p>Se ainda não tem uma conta, <Link to="/cadastro">clique aqui</Link> para se cadastrar </p>
+          <p>
+            Se ainda não tem uma conta, <Link to="/cadastro">clique aqui</Link>{" "}
+            para se cadastrar{" "}
+          </p>
         </div>
       </main>
+      <Toaster position="top-center" />
     </div>
-  )
+  );
 }
