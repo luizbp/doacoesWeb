@@ -1,6 +1,15 @@
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { PageLoginFactory } from "./main/factories/pages/PageLogin";
+import { PageHome } from "./presentation/pages/PageHome";
+
 function App() {
   return (
-    <h1>Study Clean Architecture</h1>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={PageLoginFactory}/>
+        <Route path="/home" component={PageHome}/>
+      </Switch>
+    </BrowserRouter>
   );
 }
 export default App;
