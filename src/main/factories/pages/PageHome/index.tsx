@@ -1,7 +1,7 @@
 import { SupabaseApiAuthenticator } from "../../../../infra/services/SupaBase/supabaseApiAuthenticator";
-import { PageLogin } from "../../../../presentation/pages/PageLogin";
+import { PageHome } from "../../../../presentation/pages/PageHome";
 
-export function PageLoginFactory() {
+export function PageHomeFactory() {
   const supabaseApiAuthenticator = new SupabaseApiAuthenticator();
-  return <PageLogin userAuthenticator={supabaseApiAuthenticator}/>
+  return <PageHome userAuthenticator={supabaseApiAuthenticator}/>
 }

@@ -6,9 +6,11 @@ export interface ControllerUserAuthenticator {
     params: ControllerUserAuthenticator.params
   ): Promise<ControllerUserAuthenticator.UserModel>;
 
+  signUp(params: ControllerUserAuthenticator.params): Promise<boolean>;
+
   signOut(): Promise<boolean>;
 
-  checkSession():Promise<InfoSessionType>
+  checkSession(): Promise<InfoSessionType>;
 }
 
 export namespace ControllerUserAuthenticator {
@@ -16,8 +18,6 @@ export namespace ControllerUserAuthenticator {
     email: string;
     password: string;
   };
-
-  
 
   export type UserModel = ModelUser;
 }
