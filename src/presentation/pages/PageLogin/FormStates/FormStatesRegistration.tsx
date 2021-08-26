@@ -1,14 +1,16 @@
 import { Link, useHistory } from "react-router-dom";
-import { PageLoginParams } from "../../../types/PageLoginParams";
+import { TypeLoginParams } from "../types/TypeLoginParams";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Form, Input, Button } from "antd";
+import { Form, Input } from "antd";
+
+import {CustomButton} from '../../../camponents/CustomButton'
 
 import "../index.scss";
 import { useState } from "react";
 
 export const FormStatesRegistration = (
-  { userAuthenticator }: PageLoginParams,
+  { userAuthenticator }: TypeLoginParams,
   { formStateFunction }: any
 ) => {
   const [loading, setLoading] = useState(false);
@@ -65,14 +67,12 @@ export const FormStatesRegistration = (
           />
         </Form.Item>
         <Form.Item>
-          <Button
-            className="button"
-            type="primary"
-            htmlType="submit"
+          <CustomButton
+            type="submit"
             disabled={loading}
           >
             {loading ? <span>Aguarde...</span> : <span>Cadastrar</span>}
-          </Button>
+          </CustomButton>
         </Form.Item>
       </Form>
       <p>

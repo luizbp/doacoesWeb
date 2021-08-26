@@ -1,4 +1,4 @@
-import type { PageLoginParams } from "../../types/PageLoginParams";
+import type { TypeLoginParams } from "./types/TypeLoginParams";
 
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ import { FormStatesChangePassword } from "./FormStates/FormStatesChangePassword"
 import { TypeParams } from "./types/TypeParams";
 
 export function PageLogin(
-  { userAuthenticator }: PageLoginParams
+  { userAuthenticator }: TypeLoginParams
 ) {
   const {pStateForm} = useParams<TypeParams>()
 

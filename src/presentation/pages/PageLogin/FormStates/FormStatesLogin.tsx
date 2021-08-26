@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { PageLoginParams } from "../../../types/PageLoginParams";
+import { TypeLoginParams } from "../types/TypeLoginParams";
 import toast, { Toaster } from "react-hot-toast";
-import { Form, Input, Button, Radio } from "antd";
+import { Form, Input } from "antd";
+import {CustomButton} from '../../../camponents/CustomButton'
 
 import "../index.scss";
 
-export const FormStatesLogin = ({ userAuthenticator }: PageLoginParams) => {
+export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
@@ -45,14 +46,12 @@ export const FormStatesLogin = ({ userAuthenticator }: PageLoginParams) => {
           <Input.Password placeholder="Senha" />
         </Form.Item>
         <Form.Item>
-          <Button
-            className="button"
-            type="primary"
-            htmlType="submit"
+          <CustomButton
+            type="submit"
             disabled={loading}
           >
             {loading ? <span>Aguarde...</span> : <span>Entrar</span>}
-          </Button>
+          </CustomButton>
         </Form.Item>
       </Form>
       <p>

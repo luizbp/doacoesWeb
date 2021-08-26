@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { PageLoginParams } from "../../../types/PageLoginParams";
+import { TypeLoginParams } from "../types/TypeLoginParams";
 import toast, { Toaster } from "react-hot-toast";
-import {Button} from '../../../camponents/Button'
+import {CustomButton} from '../../../camponents/CustomButton'
 
 
 import "../index.scss";
 
-export const FormStatesChangePassword = ({ userAuthenticator }: PageLoginParams) => {
+export const FormStatesChangePassword = ({ userAuthenticator }: TypeLoginParams) => {
   const [campoEmail, setCampoEmail] = useState("");
   const [campoPassword, setCampoPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ export const FormStatesChangePassword = ({ userAuthenticator }: PageLoginParams)
           value={campoPassword}
           onChange={(e) => setCampoPassword(e.target.value)}
         />
-        <Button
+        <CustomButton
           type="submit"
           onClick={(e: any) => {
             e.preventDefault();
@@ -56,7 +56,7 @@ export const FormStatesChangePassword = ({ userAuthenticator }: PageLoginParams)
           disabled={loading}
         >
           {loading ? <span>Aguarde...</span> : <span>Entrar</span>}
-        </Button>
+        </CustomButton>
       </form>
       <p>
         Se ainda não tem uma conta, <Link to="/cadastro">clique aqui</Link> para
