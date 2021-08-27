@@ -14,10 +14,8 @@ import { FormStatesRegistration } from "./FormStates/FormStatesRegistration";
 import { FormStatesChangePassword } from "./FormStates/FormStatesChangePassword";
 import { TypeParams } from "./types/TypeParams";
 
-export function PageLogin(
-  { userAuthenticator }: TypeLoginParams
-) {
-  const {pStateForm} = useParams<TypeParams>()
+export function PageLogin({ userAuthenticator }: TypeLoginParams) {
+  const { pStateForm } = useParams<TypeParams>();
 
   const history = useHistory();
 
@@ -32,19 +30,18 @@ export function PageLogin(
       if (requestSession.isLogged) history.push("/home");
     } catch (error) {
       toast.error(`Erro na validação de sessão: ${error}`);
-      console.log("ERRO: ", error)
+      console.log("ERRO: ", error);
     }
   };
 
   const verifyFormState = () => {
-    return <FormStatesLogin userAuthenticator={userAuthenticator} />;
-    // if (pStateForm === "login" || !pStateForm) {
-    //   return <FormStatesLogin userAuthenticator={userAuthenticator} />;
-    // } else if (pStateForm === "register") {
-    //   return <FormStatesRegistration userAuthenticator={userAuthenticator}/>;
-    // } else {
-    //   return <FormStatesChangePassword userAuthenticator={userAuthenticator} />;
-    // }
+    if (pStateForm === "login" || !pStateForm) {
+      return <FormStatesLogin userAuthenticator={userAuthenticator} />;
+    } else if (pStateForm === "register") {
+      return <FormStatesRegistration userAuthenticator={userAuthenticator} />;
+    } else {
+      return <FormStatesChangePassword userAuthenticator={userAuthenticator} />;
+    }
   };
 
   return (
