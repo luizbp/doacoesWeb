@@ -54,10 +54,10 @@ export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
           </CustomButton>
         </Form.Item>
       </Form>
-      <p>
+      {/* <p>
         Se ainda não tem uma conta, <Link to="/register">clique aqui</Link> para
         se cadastrar
-      </p>
+      </p> */}
       <Toaster />
     </div>
   );

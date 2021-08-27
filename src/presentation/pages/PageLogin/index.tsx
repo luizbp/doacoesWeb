@@ -37,13 +37,14 @@ export function PageLogin(
   };
 
   const verifyFormState = () => {
-    if (pStateForm === "login" || !pStateForm) {
-      return <FormStatesLogin userAuthenticator={userAuthenticator} />;
-    } else if (pStateForm === "register") {
-      return <FormStatesRegistration userAuthenticator={userAuthenticator}/>;
-    } else {
-      return <FormStatesChangePassword userAuthenticator={userAuthenticator} />;
-    }
+    return <FormStatesLogin userAuthenticator={userAuthenticator} />;
+    // if (pStateForm === "login" || !pStateForm) {
+    //   return <FormStatesLogin userAuthenticator={userAuthenticator} />;
+    // } else if (pStateForm === "register") {
+    //   return <FormStatesRegistration userAuthenticator={userAuthenticator}/>;
+    // } else {
+    //   return <FormStatesChangePassword userAuthenticator={userAuthenticator} />;
+    // }
   };
 
   return (

@@ -1,8 +1,10 @@
 import doacaoImg from '../../assets/images/doacao.svg';
 
+import './index.scss'
+
 export function IlustracaoInicial() {
   return (
-    <aside>
+    <aside className="ilustration">
       <img
         src={doacaoImg}
         alt="Ilustração simbolizando perguntas e respostas"

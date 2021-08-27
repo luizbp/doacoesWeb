@@ -1,5 +1,5 @@
-aside {
-  @media screen and (max-width: 817px) {
-    display: none;
+@media (max-width: 817px) {
+  .ilustration{
+    display: none!important;
   }
 }
