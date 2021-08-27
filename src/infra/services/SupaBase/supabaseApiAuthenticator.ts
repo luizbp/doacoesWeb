@@ -25,7 +25,7 @@ export class SupabaseApiAuthenticator implements ControllerUserAuthenticator {
       throw error;
     }
 
-    if (!data) throw "Nenhum dado encontrado";
+    if (!data) throw new Error("Nenhum dado encontrado");
 
     let email = user.email ? user.email : "";
 
@@ -68,7 +68,7 @@ export class SupabaseApiAuthenticator implements ControllerUserAuthenticator {
     if (error) {
       throw error;
     } else if (!user) {
-      throw "Usuário inválido";
+      throw new Error("Usuário inválido");
     } else {
       return this.getDataUser(user);
     }
