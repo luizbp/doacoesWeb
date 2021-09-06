@@ -1,4 +1,4 @@
-import { ControllerUserAuthenticator } from "../../../../domain/controllers/ControllerUserAuthenticator";
+import { ControllerUserAuthenticator } from "../../../../domain/Autenticador/controllers/ControllerUserAuthenticator";
 
 
 export type TypeCustomHeaderParam = {
