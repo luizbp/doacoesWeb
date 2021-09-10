@@ -2,19 +2,21 @@ import logoImg from "../../assets/images/logo_light.svg";
 import { UserOutlined } from "@ant-design/icons";
 
 import { Layout, Menu } from "antd";
-import { useHistory } from "react-router-dom";
-import { TypeCustomMenuParam } from "./types/TypeCustomMenuParam";
+import { useHistory, Link} from "react-router-dom";
 
 import "./index.scss";
+// import { useEffect } from "react";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-export const CustomMenu = ({ userAuthenticator }: TypeCustomMenuParam) => {
+export const CustomMenu = () => {
   const history = useHistory();
 
   const handleClick = async (e: any) => {
-    console.log("TCL: handleClick -> e", e);
+    if(e.key){
+      history.push(`/${e.key}`)
+    }
   };
   return (
     <>
@@ -25,13 +27,11 @@ export const CustomMenu = ({ userAuthenticator }: TypeCustomMenuParam) => {
         }}
       >
         <div className="logo">
-          <img src={logoImg} alt="" />
+        <Link to="/home"><img src={logoImg} alt="" /></Link>
         </div>
         <Menu onClick={handleClick} theme="dark" mode="inline">
-          <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-            <Menu.Item key="3">Tom</Menu.Item>
-            <Menu.Item key="4">Bill</Menu.Item>
-            <Menu.Item key="5">Alex</Menu.Item>
+          <SubMenu key="menuConta" icon={<UserOutlined />} title="Conta">
+            <Menu.Item key="configuracao_de_conta">Configurações</Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

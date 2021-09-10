@@ -1,8 +1,8 @@
-import { ControllerUserAuthenticator } from "../../../domain/controllers/ControllerUserAuthenticator";
-import { ModelUser } from "../../../domain/models/ModelUser";
+import { ControllerUserAuthenticator } from "../../../../domain/Autenticador/controllers/ControllerUserAuthenticator";
+import { ModelUser } from "../../../../domain/Autenticador/models/ModelUser";
 import { supabase } from "./supabase";
 
-// Função que contém todas as funcionalidades de autenticação do usuário 
+// Função que contém todas as funcionalidades de autenticação do usuário
 export class SupabaseApiAuthenticator implements ControllerUserAuthenticator {
   private defaultUser: ModelUser = {
     name: "",
@@ -39,19 +39,14 @@ export class SupabaseApiAuthenticator implements ControllerUserAuthenticator {
 
   // Verifica se o usuário esta conectado e retorna os dados básicos
   // para a exibição na tela
-  async checkSession() {
+  checkSession() {
     const session = supabase.auth.session();
 
     const isLogged = session ? true : false;
 
-    const user: ModelUser = isLogged
-      ? await this.getDataUser(session?.user)
-      : this.defaultUser;
-
     return {
       session,
       isLogged,
-      user,
     };
   }
 
@@ -102,5 +97,18 @@ export class SupabaseApiAuthenticator implements ControllerUserAuthenticator {
     }
 
     return true;
+  }
+
+  async getUserSession() {
+    const user = supabase.auth.user();
+
+    const userModel: ModelUser = await this.getDataUser(user);
+
+    return {
+      name: userModel.name,
+      email: userModel.email,
+      birthday: userModel.birthday,
+      idUser: userModel.idUser,
+    };
   }
 }

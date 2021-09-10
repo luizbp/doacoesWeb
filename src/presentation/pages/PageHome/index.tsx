@@ -1,48 +1,34 @@
 import { useEffect, useState } from "react";
 import { TypeHomeParams } from "../PageHome/types/TypeHomeParams";
-import { useHistory } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { ModelUser } from "../../../domain/models/ModelUser";
+import { ModelUser } from "../../../domain/Autenticador/models/ModelUser";
 import { CustomMenu } from "../../camponents/CustomMenu";
 
-import ImgConstrucao from '../../assets/images/construcao.svg'
+import ImgConstrucao from "../../assets/images/construcao.svg";
 
-
-import './index.scss'
+import "./index.scss";
 
 import { Layout, Breadcrumb } from "antd";
 import { CustomHeader } from "../../camponents/CustomHeader";
-const {Content, Footer } = Layout;
-
+const { Content, Footer } = Layout;
 
 export function PageHome({ userAuthenticator }: TypeHomeParams) {
-  const [collapsed, setCollapsed] = useState(false);
   const [vUser, setUser] = useState<ModelUser>();
 
-  const history = useHistory();
-
-  // TODO: Implementar um código que execute antes da pagina ser renderizada
   useEffect(() => {
-    checkLoggedUser();
+    getDataUser();
   }, []);
 
-  const checkLoggedUser = async () => {
-    try {
-      const requestSession = await userAuthenticator.checkSession();
-      if (!requestSession.isLogged) history.push("/");
-      setUser(requestSession.user);
-    } catch (error) {
-      toast.error(`Erro na validação de sessão: ${error}`);
-    }
+  const getDataUser = async () => {
+    let user = await userAuthenticator.getUserSession();
+    setUser(user);
   };
-
-  
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <CustomMenu userAuthenticator={userAuthenticator}/>
+      <CustomMenu />
       <Layout className="site-layout">
-        <CustomHeader userAuthenticator={userAuthenticator}/>
+        <CustomHeader userAuthenticator={userAuthenticator} />
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
@@ -54,13 +40,12 @@ export function PageHome({ userAuthenticator }: TypeHomeParams) {
             <p>Bem vindo {vUser?.name}</p>
             <img className="construcao" src={ImgConstrucao} alt="" />
           </div>
-          
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©2021 Squad Beato Carlo Acutis
         </Footer>
       </Layout>
-      <Toaster/>
+      <Toaster />
     </Layout>
   );
 }

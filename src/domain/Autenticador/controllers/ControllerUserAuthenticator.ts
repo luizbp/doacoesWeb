@@ -10,7 +10,9 @@ export interface ControllerUserAuthenticator {
 
   signOut(): Promise<boolean>;
 
-  checkSession(): Promise<InfoSessionType>;
+  checkSession(): InfoSessionType;
+
+  getUserSession(): Promise<ControllerUserAuthenticator.UserModel>
 }
 
 export namespace ControllerUserAuthenticator {
