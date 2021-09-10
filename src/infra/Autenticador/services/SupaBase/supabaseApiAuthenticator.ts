@@ -1,5 +1,5 @@
-import { ControllerUserAuthenticator } from "../../../../domain/Autenticador/controllers/ControllerUserAuthenticator";
-import { ModelUser } from "../../../../domain/Autenticador/models/ModelUser";
+import { ControllerUserAuthenticator } from "../../../../domain/Authenticator/controllers/ControllerUserAuthenticator";
+import { ModelUser } from "../../../../domain/Authenticator/models/ModelUser";
 import { supabase } from "./supabase";
 
 // Função que contém todas as funcionalidades de autenticação do usuário

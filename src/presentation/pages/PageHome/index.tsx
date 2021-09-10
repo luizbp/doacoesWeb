@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TypeHomeParams } from "../PageHome/types/TypeHomeParams";
 import toast, { Toaster } from "react-hot-toast";
-import { ModelUser } from "../../../domain/Autenticador/models/ModelUser";
+import { ModelUser } from "../../../domain/Authenticator/models/ModelUser";
 import { CustomMenu } from "../../camponents/CustomMenu";
 
 import ImgConstrucao from "../../assets/images/construcao.svg";
