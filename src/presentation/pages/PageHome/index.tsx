@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { TypeHomeParams } from "../PageHome/types/TypeHomeParams";
 import toast, { Toaster } from "react-hot-toast";
 import { ModelUser } from "../../../domain/Authenticator/models/ModelUser";
-import { CustomMenu } from "../../camponents/CustomMenu";
+import { CustomMenu } from "../../components/CustomMenu";
 
 import ImgConstrucao from "../../assets/images/construcao.svg";
 
 import "./index.scss";
 
 import { Layout, Breadcrumb } from "antd";
-import { CustomHeader } from "../../camponents/CustomHeader";
+import { CustomHeader } from "../../components/CustomHeader";
 const { Content, Footer } = Layout;
 
 export function PageHome({ userAuthenticator }: TypeHomeParams) {

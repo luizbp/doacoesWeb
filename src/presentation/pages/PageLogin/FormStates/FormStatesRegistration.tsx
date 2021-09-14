@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Form, Input } from "antd";
 
-import {CustomButton} from '../../../camponents/CustomButton'
+import {CustomButton} from '../../../components/CustomButton'
 
 import "../index.scss";
 import { useState } from "react";
@@ -32,7 +32,7 @@ export const FormStatesRegistration = (
       if (user) {
         toast.success("Cadastro realizado com sucesso, verifique seu e-mail");
       }
-    } catch (error) {
+    } catch (error:any) {
       toast.error(`Error: ${error.message}`);
     } finally {
       setLoading(false);

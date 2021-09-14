@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import logoImg from "../../assets/images/Logo.svg";
 
 import "./index.scss";
-import { IlustracaoInicial } from "../../camponents/IlustracaoInicial";
+import { IlustracaoInicial } from "../../components/IlustracaoInicial";
 import { FormStatesLogin } from "./FormStates/FormStatesLogin";
 import { FormStatesRegistration } from "./FormStates/FormStatesRegistration";
 import { FormStatesChangePassword } from "./FormStates/FormStatesChangePassword";
