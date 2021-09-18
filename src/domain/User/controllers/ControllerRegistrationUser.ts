@@ -1,5 +1,5 @@
 import { ModelTabCompany } from "../models/ModelTabCompany";
 
 export interface ControllerRegistrationUser{
-  save(param: ModelTabCompany):Promise<ModelTabCompany>;
+  save(param: ModelTabCompany):Promise<Array<ModelTabCompany>>;
 }

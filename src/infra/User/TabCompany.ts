@@ -2,50 +2,108 @@ import { ControllerTabCompany } from "../../domain/User/controllers/ControllerTa
 import { ModelTabCompany } from "../../domain/User/models/ModelTabCompany";
 import { supabase } from "../Autenticador/services/SupaBase/supabase";
 
+import UUID from "uuidjs";
+
 export class TabCompany implements ControllerTabCompany {
-  validations(param: ModelTabCompany): boolean {
-    if (!param) return false;
+  validations(
+    type: string,
+    param: ModelTabCompany | null,
+    id?: string
+  ): boolean {
+    // if (!param)
+    //   throw new Error("Atenção, algum campo não foi informado, verifique");
+
+    // Validações do update
+    if (type === "update") {
+      if (!param?.id) throw new Error("Atenção! o Campo ID não foi informado");
+    }
+    // Validações do DELETE
+    if (type === "delete") {
+      if (!id) throw new Error("Atenção! o Campo ID não foi informado");
+    }
     return true;
   }
 
   async insert(param: ModelTabCompany): Promise<ModelTabCompany> {
-    if (!this.validations(param))
-      throw new Error("Ocorreu um problema na inserção dos dados, verifique");
+    this.validations("insert", param);
+
+    let uuid = UUID.generate();
+
+    let dataInsert = {
+      id: uuid,
+      ...param,
+    };
 
     const { data, error } = await supabase
       .from("tb_company")
-      .insert([
-        {
-          cnpj: param.cnpj,
-          ie: param.ie,
-          im: param.im,
-          dt_foundation: param.dt_foundation,   
-        },
-      ]);
-      
-    if(!data)
-      throw new Error("Ocorreu um problema na inserção dos dados, verifique");
-    
-    if(!error)
-      throw error
+      .insert([dataInsert]);
+
+    if (error) throw new Error(error.message);
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na inserção dos dados, contacte o suporte"
+      );
 
     return {
-      id: data[0].id,
-      cnpj: data[0].cnpj,
-      ie: data[0].ie,
-      im: data[0].im,
-      dt_foundation: data[0].dt_foundation,
-      created_at: data[0].created_at,
-      updated_at: data[0].updated_at
-    }
+      ...data[0],
+    };
   }
-  update(param: ModelTabCompany): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async update(param: ModelTabCompany): Promise<ModelTabCompany> {
+    // Faz todas as validações de UPDATE
+    this.validations("update", param);
+
+    let dataInsert = {
+      ...param,
+    };
+
+    const { data, error } = await supabase
+      .from("tb_company")
+      .update([dataInsert])
+      .match({ id: param.id });
+
+    if (error) throw new Error(error.message);
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na atualização dos dados, contacte o suporte"
+      );
+
+    return {
+      ...data[0],
+    };
   }
-  select(param: any): Promise<ModelTabCompany> {
-    throw new Error("Method not implemented.");
+  async select(
+    param?: Record<string, unknown>
+  ): Promise<ModelTabCompany | any> {
+    const { data, error } = await supabase
+      .from("tb_company")
+      .select()
+      .match(param ? param : {});
+
+    if (error) throw new Error(error.message);
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na busca dos dados, contacte o suporte"
+      );
+
+    return data;
   }
-  delete(id: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<boolean> {
+    // Faz todas as validações de UPDATE
+    this.validations("delete", null, id);
+
+    const { data, error } = await supabase
+      .from("tb_company")
+      .delete()
+      .match({ id });
+
+    if (error) throw new Error(error.message);
+
+    if (!data)
+      throw new Error("Ocorreu um problema na exclusão dos dados, verifique");
+
+    return true;
   }
 }

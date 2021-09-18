@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Layout, Breadcrumb, Form, Input, Button } from "antd";
 import { CustomButton } from "../../components/CustomButton";
+import { TypeErrorDefault } from "../../../domain/Common/types/TypeErrorDefault";
 const { Content, Footer } = Layout;
 
 export const PageConfiguracaoConta = ({
@@ -23,9 +24,10 @@ export const PageConfiguracaoConta = ({
       }
 
       toast.success('Tudo OK')
+      console.log('teste => ', teste)      
       
     }catch(erro:any){
-      toast.error('Teste')
+      toast.error(erro.message)
     }
   };
 
