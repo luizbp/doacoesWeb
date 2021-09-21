@@ -1,0 +1,1 @@
+export type ModelClassHelper = Record<string, any>;
