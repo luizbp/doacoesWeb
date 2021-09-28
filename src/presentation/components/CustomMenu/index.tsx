@@ -32,6 +32,7 @@ export const CustomMenu = () => {
         <Menu onClick={handleClick} theme="dark" mode="inline">
           <SubMenu key="menuConta" icon={<UserOutlined />} title="Conta">
             <Menu.Item key="configuracao_de_conta">Configurações</Menu.Item>
+            <Menu.Item key="cadastro_conferencia">Cadastro de conferencia</Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

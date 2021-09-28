@@ -96,6 +96,7 @@ export class ClassHelper implements ControllerClassHelper {
   async select(
     param?: Record<string, unknown>
   ): Promise<ModelClassHelper | any> {
+    
     const { data, error } = await supabase
       .from(this.pNameTable)
       .select()
