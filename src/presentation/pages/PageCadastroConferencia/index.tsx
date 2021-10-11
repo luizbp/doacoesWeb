@@ -26,6 +26,7 @@ export const PageCadastroConferencia = ({
         <FormStateCadConferences
           registrationConference={registrationConference}
           userAuthenticator={userAuthenticator}
+          idConferencia={idRegistry}
         />
       );
     } else {
@@ -45,7 +46,7 @@ export const PageCadastroConferencia = ({
         <CustomHeader userAuthenticator={userAuthenticator} />
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Configurações da </Breadcrumb.Item>
+            <Breadcrumb.Item>Cadastro de Conferencias</Breadcrumb.Item>
           </Breadcrumb>
           {verifyFormState()}
         </Content>

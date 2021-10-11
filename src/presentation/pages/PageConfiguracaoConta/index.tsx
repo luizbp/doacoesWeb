@@ -58,7 +58,7 @@ export const PageConfiguracaoConta = ({
     setIsFormLoading(false);
   };
 
-  const handleLogin = async (e: any) => {
+  const handleSaving = async (e: any) => {
     try {
       setSaveLoading(true);
       const retorno = await registrationUser.save(dataUser);
@@ -84,7 +84,7 @@ export const PageConfiguracaoConta = ({
             <Breadcrumb.Item>Configurações da Conta</Breadcrumb.Item>
           </Breadcrumb>
           <section className="configuracoes-conta">
-            <Form layout={"vertical"} onFinish={handleLogin}>
+            <Form layout={"vertical"} onFinish={handleSaving}>
               <div className="site-card-wrapper">
                 <Row gutter={16}>
                   <Col lg={12} md={24} className="colum-card">

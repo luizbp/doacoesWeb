@@ -7,7 +7,7 @@ export type ModelTabAddress = {
   region: string
   zip_code: string
   country: string
-  opening_hours: JSON
+  opening_hours: string
   link_map: string
   state: string
   city: string

@@ -10,6 +10,7 @@ export type TypeCadastroConferenciaParams = {
 export type TypeFormStateCadConferences = {
   registrationConference: RegistrationConference
   userAuthenticator: ControllerUserAuthenticator,
+  idConferencia: string
 }
 
 export type TypeFormStateListConferences = {

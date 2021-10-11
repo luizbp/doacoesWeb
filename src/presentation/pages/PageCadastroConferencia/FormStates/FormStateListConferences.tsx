@@ -1,8 +1,8 @@
-import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import { CheckCircleOutlined, CloseCircleOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Button, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { ModelTabInstitutionHasUser } from "../../../../domain/User/models/ModelTabInstitutionHasUser";
 import { TypeFormStateListConferences } from "../types/TypeCadastroConferenciaParams";
 
@@ -10,6 +10,8 @@ export const FormStateListConferences = ({
   registrationConference,
   userAuthenticator,
 }: TypeFormStateListConferences) => {
+  const history = useHistory()
+
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [isSaveLoading, setSaveLoading] = useState(false);
   const [dataListConference, setDataListConference] = useState<
@@ -30,13 +32,13 @@ export const FormStateListConferences = ({
   const columns: ColumnsType<ModelTabInstitutionHasUser> = [
     {
       title: "ID Conferencia",
-      width: 100,
+      width: 30,
       dataIndex: "tb_institution_id",
       key: "tb_institution_id",
     },
     {
       title: "Nome Conferencia",
-      width: 100,
+      width: 70,
       dataIndex: "kind",
       key: "kind",
     },
@@ -48,16 +50,16 @@ export const FormStateListConferences = ({
       align: 'center',
       render: (data) => {
         if (data)
-          return <CheckCircleOutlined twoToneColor="#52c41a" size={32}/>
+          return <CheckCircleOutlined twoToneColor="#52c41a" size={32} />
         else
-          return <CloseCircleOutlined twoToneColor="#eb2f96" size={32}/>
+          return <CloseCircleOutlined twoToneColor="#eb2f96" size={32} />
       },
     },
     {
       title: 'Ações',
       key: 'operation',
       fixed: 'right',
-      width: 30,
+      width: 10,
       align: 'center',
       render: (data) => <Link to={`/cadastro_conferencia/${data.tb_institution_id}`}>Alterar</Link>,
     }
@@ -69,11 +71,22 @@ export const FormStateListConferences = ({
     setDataListConference(data);
   };
 
+  const handleNewConference = () => {
+    history.push('/cadastro_conferencia/novo')
+  }
+
   return (
-    <Table
-      columns={columns}
-      dataSource={dataListConference}
-      scroll={{ x: 1500, y: 300 }}
-    />
+    <>
+      {/* TODO: Pegar o campo de limite de conferencias cadastradas ta tabela */}
+      <Button disabled={dataListConference.length >= 4} className="button-new" onClick={handleNewConference}>
+        <UserAddOutlined />
+        Nova
+      </Button>
+      <Table
+        columns={columns}
+        dataSource={dataListConference}
+        scroll={{ x: 1500, y: 300 }}
+      />
+    </>
   );
 };

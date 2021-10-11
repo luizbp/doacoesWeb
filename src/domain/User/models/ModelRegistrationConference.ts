@@ -8,10 +8,9 @@ export type ModelRegistrationConference = {
   kind_phone: string;
   contact: string;
   number: string;
-  address_kind: string;
   kind_address: string;
   address: string;
-  nmbr: string ;
+  nmbr: number ;
   complement: string;
   region: string;
   zip_code: string;
@@ -20,6 +19,7 @@ export type ModelRegistrationConference = {
   link_map: string;
   state: string;
   city: string;
-  created_at: string;
-  updated_at: string;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
 };
