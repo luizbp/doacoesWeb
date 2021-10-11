@@ -11,7 +11,7 @@ export type ModelRegistrationConference = {
   address_kind: string;
   kind_address: string;
   address: string;
-  nmbr: number;
+  nmbr: string ;
   complement: string;
   region: string;
   zip_code: string;
