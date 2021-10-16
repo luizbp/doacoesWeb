@@ -23,7 +23,7 @@ export class RegistrationConference
   implements ControllerRegistrationConference {
   async save(id_user: string, id_conferece: string, param: Record<string, any>): Promise<boolean> {
     // throw new Error("Method not implemented.");
-    const { ClassHelper } = await import("./ClassHelper");
+    const { ClassHelper } = await import("../Common/ClassHelper");
 
     if(id_conferece === 'novo'){
       let uuid = UUID.generate()
@@ -96,7 +96,7 @@ export class RegistrationConference
 
   async get(id_user: string, id_conferece: string): Promise<ModelRegistrationConference> {
     // throw new Error("Method not implemented.");
-    const { ClassHelper } = await import("./ClassHelper");
+    const { ClassHelper } = await import("../Common/ClassHelper");
 
     // Pegando dados da tabela Entity
     const tabInstitutionHasUser = new ClassHelper(NameTabInstitutionHasUser);
@@ -156,7 +156,7 @@ export class RegistrationConference
   }
 
   async getList(id: string): Promise<Array<ModelTabInstitutionHasUser>> {
-    const { ClassHelper } = await import("./ClassHelper");
+    const { ClassHelper } = await import("../Common/ClassHelper");
 
     // Pegando dados da tabela Company
     const tabInstitutionHasUser = new ClassHelper("tb_institution_has_user");
