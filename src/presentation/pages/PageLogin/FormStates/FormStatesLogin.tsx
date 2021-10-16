@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { TypeLoginParams } from "../types/TypeLoginParams";
 import toast, { Toaster } from "react-hot-toast";
 import { Form, Input } from "antd";
-import {CustomButton} from '../../../camponents/CustomButton'
+import {CustomButton} from '../../../components/CustomButton'
 
 import "../index.scss";
 
@@ -23,7 +23,7 @@ export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
       if (user) {
         history.push("/home");
       }
-    } catch (error) {
+    } catch (error:any) {
       toast.error(`Error: ${error.message}`);
     } finally {
       setLoading(false);

@@ -1,0 +1,7 @@
+export const NameTabCompany = 'tb_company'
+export const NameTabMailing = 'tb_mailing'
+export const NameTabEntity = 'tb_entity'
+export const NameTabInstitutionHasUser = 'tb_institution_has_user'
+export const NameTabPhone = 'tb_phone'
+export const NameTabAddress = 'tb_address'
+export const NameTabInstitution = 'tb_institution'

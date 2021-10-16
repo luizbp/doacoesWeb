@@ -1,0 +1,28 @@
+.configuracoes-conta {
+  .ant-card-head {
+    background-color: #153042;
+
+    .ant-card-head-title {
+      color: #fff;
+      font-weight: 300;
+      padding: 10px 0;
+    }
+  }
+  .ant-card-body {
+    background-color: #fafafa;
+    .colum-card {
+      margin: 10px 0;
+    }
+  }
+
+  .actions{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+
+    button{
+      margin: 0 auto;
+    }
+  }
+}

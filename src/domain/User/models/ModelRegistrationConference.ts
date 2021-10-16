@@ -1,0 +1,25 @@
+export type ModelRegistrationConference = {
+  id: string;
+  tb_user_id: string;
+  name_company: string;
+  nick_trade: string;
+  note: string;
+  email: string;
+  kind_phone: string;
+  contact: string;
+  number: string;
+  kind_address: string;
+  address: string;
+  nmbr: number ;
+  complement: string;
+  region: string;
+  zip_code: string;
+  country: string;
+  opening_hours: string;
+  link_map: string;
+  state: string;
+  city: string;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
