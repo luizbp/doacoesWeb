@@ -6,5 +6,5 @@ export interface ControllerClassHelper {
   update(param: ModelClassHelper): Promise<ModelClassHelper>
   upsert(param: ModelClassHelper): Promise<ModelClassHelper>
   select(param: any): Promise<Array<ModelClassHelper>>;
-  delete(id: string): Promise<boolean>;
+  delete(id: Record<string, any>): Promise<boolean>;
 }

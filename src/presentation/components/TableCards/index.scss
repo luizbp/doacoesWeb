@@ -1,0 +1,103 @@
+.table-card{
+    display: block;
+    .body{
+
+        .card{
+            display: inline-block;
+            padding: 32px 20px 45px 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 3px 3px 12px 2px #dbdbdb;
+            position: relative;
+            overflow: hidden;
+            margin: 0 5px;
+
+            figure{
+                img{
+                    margin: 0 auto;
+                    display: block;
+                    width: 120px;
+                    height: 120px;
+                    object-fit: contain;
+                }
+            }
+
+            .description{
+                .ant-card-meta-title{
+                    font-size: 15px;
+                }
+                .ant-card-meta-description{
+                    font-size: 15px;
+                    max-width: 15ch;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+
+            .status{
+                .enable{
+                    width: 100%;
+                    position: absolute;
+                    text-align: center;
+                    top: 0;
+                    right: 0;
+                    padding: 6px;
+                    font-size: 13px;
+                    font-weight: bold;
+                    background: #52c41a;
+                    color: #fff;
+                }
+
+                .disable{
+                    width: 100%;
+                    position: absolute;
+                    text-align: center;
+                    top: 0;
+                    right: 0;
+                    padding: 6px;
+                    font-size: 13px;
+                    font-weight: bold;
+                    background: #8c8c8c;
+                    color: #fff;
+                }
+            }
+
+            .button-edit{
+                position: absolute;
+                bottom: 7px;
+                color: rgb(64, 131, 202);
+                left: calc(50% + 10px);
+                transition: 0.3s all ease-in-out;
+
+                svg{
+                    width: 20px;
+                    height: 20px;
+                }
+
+                &:hover{
+                    transform: scale(1.1);
+                    transition: 0.3s all ease-in-out;
+                }
+            }
+
+            .button-delete{
+                position: absolute;
+                color: rgb(202, 64, 64);
+                bottom: 7px;
+                right: calc(50% + 10px);
+                transition: 0.3s all ease-in-out;
+
+                svg{
+                    width: 20px;
+                    height: 20px;
+                }
+
+                &:hover{
+                    transform: scale(1.1);
+                    transition: 0.3s all ease-in-out;
+                }
+            }
+        }
+    }
+}

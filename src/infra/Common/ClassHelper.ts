@@ -12,7 +12,7 @@ export class ClassHelper implements ControllerClassHelper {
   validations(
     type: string,
     param: ModelClassHelper | null,
-    id?: string
+    id?: Record<string, any>
   ): boolean {
     // if (!param)
     //   throw new Error("Atenção, algum campo não foi informado, verifique");
@@ -119,14 +119,14 @@ export class ClassHelper implements ControllerClassHelper {
 
     return data;
   }
-  async delete(id: string): Promise<boolean> {
+  async delete(id: Record<string, any>): Promise<boolean> {
     // Faz todas as validações de UPDATE
     this.validations("delete", null, id);
 
     const { data, error } = await supabase
       .from(this.pNameTable)
       .delete()
-      .match({ id });
+      .match(id);
 
     if (error) {
       console.error({

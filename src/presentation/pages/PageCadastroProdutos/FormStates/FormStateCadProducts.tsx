@@ -8,6 +8,7 @@ import {
   Card,
   Skeleton,
   Checkbox,
+  Select,
 } from "antd";
 import { useEffect, useState } from "react";
 import { TypeFormStateCadProducts } from "../types/TypeCadProductsParams";
@@ -16,6 +17,8 @@ import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabProduct } from "../../../../domain/Produtc/models/ModelTabProduct";
 import { RedoOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 export const FormStateCadProducts = ({
   registrationProducts, userAuthenticator, idConferencia
@@ -114,6 +117,24 @@ export const FormStateCadProducts = ({
                   </Form.Item>
 
                   <Form.Item label="Categoria">
+                  <Select
+                      showSearch
+                      style={{ width: 200 }}
+                      placeholder="Search to Select"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option?.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      filterSort={(optionA, optionB) =>
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                      }
+                    >
+                      <Option value="2">Closed</Option>
+                      <Option value="3">Communicated</Option>
+                      <Option value="4">Identified</Option>
+                      <Option value="5">Resolved</Option>
+                      <Option value="6">Cancelled</Option>
+                    </Select>,
                     {/* <Input
                       placeholder="Ex: Primeiro de Campinas"
                       id="nick_trade"

@@ -64,6 +64,19 @@ export class RegistrationProducts
     };
   }
 
+  async delete(id_user: string, id_product: string): Promise<boolean> {
+    const { ClassHelper } = await import("../Common/ClassHelper");
+
+    // Pegando dados da tabela Entity
+    const tabProduct = new ClassHelper(NameTabProduct);
+    let resultTabProduct: boolean = await tabProduct.delete({
+      id: id_product,
+      tb_user_id: id_user
+    });
+
+    return resultTabProduct;
+  }
+
   async getList(id: string): Promise<Array<ModelTabProduct>> {
     const { ClassHelper } = await import("../Common/ClassHelper");
 
