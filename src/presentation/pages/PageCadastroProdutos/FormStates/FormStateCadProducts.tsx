@@ -17,6 +17,8 @@ import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabProduct } from "../../../../domain/Produtc/models/ModelTabProduct";
 import { RedoOutlined } from "@ant-design/icons";
+import { ModelTabMeasure } from "../../../../domain/Produtc/models/ModelTabMeasure";
+import { ModelTabCategory } from "../../../../domain/Produtc/models/ModelTabCategory";
 
 const { Option } = Select;
 
@@ -29,6 +31,8 @@ export const FormStateCadProducts = ({
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [isSaveLoading, setSaveLoading] = useState(false);
   const [linkPreviewImagem, setLinkPreviewImagem] = useState('');
+  const [measures, setMeasures] = useState<Array<ModelTabMeasure>>([]);
+  const [category, setCategory] = useState<Array<ModelTabCategory>>([]);
 
   const [dataProducts, setDataProducts] =
     useState<ModelTabProduct>({
@@ -48,18 +52,25 @@ export const FormStateCadProducts = ({
   }, []);
 
   const loadData = async () => {
+    setIsFormLoading(true);
+    const measures = await registrationProducts.getMeadures();
+    const category = await registrationProducts.getCategory();
+
+    setCategory(category)
+    setMeasures(measures)
+
     if(idConferencia !== 'novo'){
-      setIsFormLoading(true);
       try {
         const { idUser } = await userAuthenticator.getUserSession();
         const retorno = await registrationProducts.get(idUser, idConferencia);
+
         setDataProducts(retorno);
         setLinkPreviewImagem(retorno.link_image)
       } catch (erro: any) {
         toast.error(erro.message);
       }
-      setIsFormLoading(false);
     }
+    setIsFormLoading(false);
   };
 
   const handleExecute = async () => {
@@ -82,7 +93,8 @@ export const FormStateCadProducts = ({
 
   const handleCancel = async () => {
     swal({
-      title: "Atenção, todos os dados não salvos seram perdidos?",
+      title: 'Atenção!',
+      text: "Todos os dados não salvos seram perdidos?",
       icon: "info",
       buttons: ['Cancelar', true],
     }).then(async (willDelete) => {
@@ -117,52 +129,42 @@ export const FormStateCadProducts = ({
                   </Form.Item>
 
                   <Form.Item label="Categoria">
-                  <Select
-                      showSearch
-                      style={{ width: 200 }}
-                      placeholder="Search to Select"
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option?.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      filterSort={(optionA, optionB) =>
-                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                      }
-                    >
-                      <Option value="2">Closed</Option>
-                      <Option value="3">Communicated</Option>
-                      <Option value="4">Identified</Option>
-                      <Option value="5">Resolved</Option>
-                      <Option value="6">Cancelled</Option>
-                    </Select>,
-                    {/* <Input
-                      placeholder="Ex: Primeiro de Campinas"
-                      id="nick_trade"
-                      name="nick_trade"
-                      value={dataProducts.nick_trade}
-                      readOnly={isSaveLoading}
-                      onChange={(e) =>
-                        setDataProducts({
-                          ...dataProducts,
-                          nick_trade: e.target.value,
-                        })
-                      }
-                    /> */}
+                    <Select
+                        style={{ width: 200 }}
+                        placeholder="Selecione..."
+                        value={dataProducts.tb_measure_id}
+                        onChange={(e) =>
+                          setDataProducts({
+                            ...dataProducts,
+                            tb_measure_id: e ? e.toString() : '',
+                          })
+                        }
+                      >
+                        {measures.map((value) => {
+                          return (
+                            <Option key={value.id} value={value.id}>{value.description}</Option>
+                          )
+                        })}
+                      </Select>
                   </Form.Item>
                   <Form.Item label="Unidade de medida">
-                    {/* <Input
-                      placeholder="E-mail"
-                      id="email"
-                      name="email"
-                      value={dataProducts.email}
-                      readOnly={isSaveLoading}
+                    <Select
+                      style={{ width: 200 }}
+                      placeholder="Selecione..."
+                      value={dataProducts.tb_category_id}
                       onChange={(e) =>
                         setDataProducts({
                           ...dataProducts,
-                          email: e.target.value,
+                          tb_category_id: e ? e.toString() : '',
                         })
                       }
-                    /> */}
+                    >
+                      {category.map((value) => {
+                        return (
+                          <Option key={value.id} value={value.id}>{value.description}</Option>
+                        )
+                      })}
+                    </Select>,
                   </Form.Item>
                   <Form.Item label="Observação">
                     <Input.TextArea

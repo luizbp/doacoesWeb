@@ -119,6 +119,33 @@ export class ClassHelper implements ControllerClassHelper {
 
     return data;
   }
+
+  async selectContain(
+    param: {name: string, value: any}
+  ): Promise<ModelClassHelper | any> {    
+    const { data, error } = await supabase
+      .from(this.pNameTable)
+      .select()
+      .filter(param.name, 'in', param.value);
+
+      console.log('data', data)
+    if (error) {
+      console.error({
+        message: `Erro => ${error.message}`,
+        origin: "ClassHelper => selectContain",
+      });
+      throw new Error(
+        "Ocorreu um erro desconhecido, por favor contacte o suporte"
+      );
+    }
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na busca dos dados, contacte o suporte"
+      );
+
+    return data;
+  }
   async delete(id: Record<string, any>): Promise<boolean> {
     // Faz todas as validações de UPDATE
     this.validations("delete", null, id);

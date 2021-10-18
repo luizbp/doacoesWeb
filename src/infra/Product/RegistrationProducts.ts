@@ -1,9 +1,13 @@
 import UUID from "uuidjs";
 
 import {
+  NameTabCategory,
+  NameTabMeasure,
   NameTabProduct,
 } from "../../domain/Common/variables/NameTabs";
 import { ControllerRegistrationProducts } from "../../domain/Produtc/controller/ControllerRegistrationProducts";
+import { ModelTabCategory } from "../../domain/Produtc/models/ModelTabCategory";
+import { ModelTabMeasure } from "../../domain/Produtc/models/ModelTabMeasure";
 import { ModelTabProduct } from "../../domain/Produtc/models/ModelTabProduct";
 
 import { ModelRegistrationConference } from "../../domain/User/models/ModelRegistrationConference";
@@ -15,18 +19,18 @@ export class RegistrationProducts
     // throw new Error("Method not implemented.");
     const { ClassHelper } = await import("../Common/ClassHelper");
 
-    if(id_product === 'novo'){
+    if (id_product === 'novo') {
       let uuid = UUID.generate()
       id_product = uuid;
     }
-    
+
 
     // Pegando dados da tabela Entity
     const tabProduct = new ClassHelper(NameTabProduct);
     await tabProduct.upsert({
       id: id_product,
       identifier: param.identifier,
-      tb_user_id: param.tb_user_id,
+      tb_user_id: id_user,
       description: param.description,
       tb_category_id: param.tb_category_id,
       tb_measure_id: param.tb_measure_id,
@@ -38,7 +42,6 @@ export class RegistrationProducts
     return true
   }
 
-
   async get(id_user: string, id_product: string): Promise<ModelTabProduct> {
     // throw new Error("Method not implemented.");
     const { ClassHelper } = await import("../Common/ClassHelper");
@@ -49,6 +52,7 @@ export class RegistrationProducts
       id: id_product,
       tb_user_id: id_user
     });
+
 
 
     return {
@@ -77,16 +81,55 @@ export class RegistrationProducts
     return resultTabProduct;
   }
 
-  async getList(id: string): Promise<Array<ModelTabProduct>> {
+  async getList(id_user: string): Promise<Array<ModelTabProduct>> {
     const { ClassHelper } = await import("../Common/ClassHelper");
 
     // Pegando dados da tabela Company
     const tabProduct = new ClassHelper(NameTabProduct);
     let resultCompany: Array<ModelTabProduct> =
       await tabProduct.select({
-        tb_user_id: id,
+        tb_user_id: id_user,
       });
 
     return resultCompany;
+  }
+
+  async getMeadures(id?: string, id_user?: string) {
+    // throw new Error("Method not implemented.");
+    const { ClassHelper } = await import("../Common/ClassHelper");
+
+    // Pegando dados da tabela Entity
+    const tabMeasure = new ClassHelper(NameTabMeasure);
+    let resultTabMeasure: Array<ModelTabMeasure> = id ? await tabMeasure.select({
+      id,
+      tb_user_id: id_user
+    }) : await tabMeasure.select();
+
+    return resultTabMeasure;
+  }
+
+  async getCategory(id?: string, id_user?: string) {
+    // throw new Error("Method not implemented.");
+    const { ClassHelper } = await import("../Common/ClassHelper");
+
+    // Pegando dados da tabela Entity
+    const tabCategory = new ClassHelper(NameTabCategory);
+    let resultTabCategory: Array<ModelTabCategory> = id ? await tabCategory.select({
+      id,
+      tb_user_id: id_user
+    }) : await tabCategory.select();
+
+    return resultTabCategory;
+  }
+
+  async search(params: {name: string , value:any}): Promise<Array<ModelTabProduct>> {
+    const { ClassHelper } = await import("../Common/ClassHelper");
+
+    // Pegando dados da tabela Company
+    const tabProduct = new ClassHelper(NameTabProduct);
+    let resultProduct: Array<ModelTabProduct> = params ?
+      await tabProduct.selectContain(params) : await tabProduct.select()
+
+    return resultProduct;
   }
 }

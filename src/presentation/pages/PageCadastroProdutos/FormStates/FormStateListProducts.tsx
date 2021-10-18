@@ -8,7 +8,8 @@ import { ModelTabInstitutionHasUser } from "../../../../domain/User/models/Model
 import { TableCards } from "../../../components/TableCards";
 import { TypeFormStateListProducts } from "../types/TypeCadProductsParams";
 import swal from "sweetalert";
-import  toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import Search from "antd/lib/input/Search";
 
 export const FormStateListProducts = ({
   registrationProducts,
@@ -16,7 +17,8 @@ export const FormStateListProducts = ({
 }: TypeFormStateListProducts) => {
   const history = useHistory()
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [idUser, setIdUser] = useState('');
   const [dataListProducts, setDataListProducts] = useState<
     Array<ModelTabProduct>
@@ -34,9 +36,13 @@ export const FormStateListProducts = ({
     },
   ]);
 
-  useEffect(() => {
-    loadData()
-  }, [])
+  const nomeColums = {
+    id: 'id',
+    title: 'description',
+    description: 'note',
+    linkImage: 'link_image',
+    active: 'active'
+  }
 
   const columns: ColumnsType<ModelTabInstitutionHasUser> = [
     {
@@ -74,13 +80,17 @@ export const FormStateListProducts = ({
     }
   ];
 
+  useEffect(() => {
+    loadData()
+  }, [])
+
   const loadData = async () => {
-    setIsLoading(true)
+    setIsLoadingPage(true)
     const { idUser } = await userAuthenticator.getUserSession();
     const data = await registrationProducts.getList(idUser);
     setIdUser(idUser)
     setDataListProducts(data);
-    setIsLoading(false)
+    setIsLoadingPage(false)
   };
 
   const handleNewProduct = () => {
@@ -106,6 +116,7 @@ export const FormStateListProducts = ({
             swal("Produto deletado!", {
               icon: "success",
             });
+            loadData()
           } catch (error) {
             toast.error(error)
           }
@@ -113,12 +124,14 @@ export const FormStateListProducts = ({
       });
   }
 
-  const nomeColums = {
-    id: 'id',
-    title: 'description',
-    description: 'note',
-    linkImage: 'link_image',
-    active: 'active'
+  const hadleSearchProduct = async (description: string) => {
+    if (!description) return
+    setIsLoadingSearch(true)
+    const data = await registrationProducts.search({ name: 'description', value: description });
+    if(data){
+      setDataListProducts(data);
+    }
+    setIsLoadingSearch(false)
   }
 
   return (
@@ -129,7 +142,10 @@ export const FormStateListProducts = ({
         Nova
       </Button>
       <div>
-        <Skeleton loading={isLoading} active>
+        <div className='barra-pesquisa'>
+          <Search placeholder="Digite um nome para procurar" enterButton="Procurar" size="large" loading={isLoadingSearch} onSearch={hadleSearchProduct} />
+        </div>
+        <Skeleton loading={isLoadingPage} active>
           <TableCards
             dataSource={dataListProducts}
             nameColums={nomeColums}
@@ -137,7 +153,7 @@ export const FormStateListProducts = ({
             actionEdit={handleEditProduct} />
         </Skeleton>
       </div>
-      <Toaster/>
+      <Toaster />
     </>
   );
 };
