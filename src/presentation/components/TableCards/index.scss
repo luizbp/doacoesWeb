@@ -4,13 +4,20 @@
 
         .card{
             display: inline-block;
-            padding: 32px 20px 45px 20px;
+            padding: 52px 35px 50px 35px;
             background: #fff;
             border-radius: 10px;
             box-shadow: 3px 3px 12px 2px #dbdbdb;
             position: relative;
             overflow: hidden;
             margin: 0 5px;
+            transition: 0.3s;
+
+            // &:hover{
+            //     transform: scale(1.05);
+            //     cursor: pointer;
+            //     transition: 0.3s;
+            // }
 
             figure{
                 img{

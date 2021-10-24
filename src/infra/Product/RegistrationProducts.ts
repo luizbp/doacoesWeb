@@ -13,17 +13,19 @@ import { ModelTabProduct } from "../../domain/Produtc/models/ModelTabProduct";
 import { ModelRegistrationConference } from "../../domain/User/models/ModelRegistrationConference";
 import { checkFields } from "../Common/checkFilds";
 
-export class RegistrationProducts
-  implements ControllerRegistrationProducts {
-  async save(id_user: string, id_product: string, param: Record<string, any>): Promise<boolean> {
+export class RegistrationProducts implements ControllerRegistrationProducts {
+  async save(
+    id_user: string,
+    id_product: string,
+    param: Record<string, any>
+  ): Promise<boolean> {
     // throw new Error("Method not implemented.");
     const { ClassHelper } = await import("../Common/ClassHelper");
 
-    if (id_product === 'novo') {
-      let uuid = UUID.generate()
+    if (id_product === "novo") {
+      let uuid = UUID.generate();
       id_product = uuid;
     }
-
 
     // Pegando dados da tabela Entity
     const tabProduct = new ClassHelper(NameTabProduct);
@@ -39,7 +41,7 @@ export class RegistrationProducts
       link_image: param.link_image,
     });
 
-    return true
+    return true;
   }
 
   async get(id_user: string, id_product: string): Promise<ModelTabProduct> {
@@ -50,21 +52,19 @@ export class RegistrationProducts
     const tabProduct = new ClassHelper(NameTabProduct);
     let resultTabProduct: Array<ModelTabProduct> = await tabProduct.select({
       id: id_product,
-      tb_user_id: id_user
+      tb_user_id: id_user,
     });
 
-
-
     return {
-      id: checkFields(resultTabProduct[0]?.id, ''),
-      identifier: checkFields(resultTabProduct[0]?.identifier, ''),
-      tb_user_id: checkFields(resultTabProduct[0]?.tb_user_id, ''),
-      description: checkFields(resultTabProduct[0]?.description, ''),
-      tb_category_id: checkFields(resultTabProduct[0]?.tb_category_id, ''),
-      tb_measure_id: checkFields(resultTabProduct[0]?.tb_measure_id, ''),
-      active: checkFields(resultTabProduct[0]?.active, ''),
-      note: checkFields(resultTabProduct[0]?.note, ''),
-      link_image: checkFields(resultTabProduct[0]?.link_image, ''),
+      id: checkFields(resultTabProduct[0]?.id, ""),
+      identifier: checkFields(resultTabProduct[0]?.identifier, ""),
+      tb_user_id: checkFields(resultTabProduct[0]?.tb_user_id, ""),
+      description: checkFields(resultTabProduct[0]?.description, ""),
+      tb_category_id: checkFields(resultTabProduct[0]?.tb_category_id, ""),
+      tb_measure_id: checkFields(resultTabProduct[0]?.tb_measure_id, ""),
+      active: checkFields(resultTabProduct[0]?.active, ""),
+      note: checkFields(resultTabProduct[0]?.note, ""),
+      link_image: checkFields(resultTabProduct[0]?.link_image, ""),
     };
   }
 
@@ -75,7 +75,7 @@ export class RegistrationProducts
     const tabProduct = new ClassHelper(NameTabProduct);
     let resultTabProduct: boolean = await tabProduct.delete({
       id: id_product,
-      tb_user_id: id_user
+      tb_user_id: id_user,
     });
 
     return resultTabProduct;
@@ -86,10 +86,9 @@ export class RegistrationProducts
 
     // Pegando dados da tabela Company
     const tabProduct = new ClassHelper(NameTabProduct);
-    let resultCompany: Array<ModelTabProduct> =
-      await tabProduct.select({
-        tb_user_id: id_user,
-      });
+    let resultCompany: Array<ModelTabProduct> = await tabProduct.select({
+      tb_user_id: id_user,
+    });
 
     return resultCompany;
   }
@@ -100,10 +99,12 @@ export class RegistrationProducts
 
     // Pegando dados da tabela Entity
     const tabMeasure = new ClassHelper(NameTabMeasure);
-    let resultTabMeasure: Array<ModelTabMeasure> = id ? await tabMeasure.select({
-      id,
-      tb_user_id: id_user
-    }) : await tabMeasure.select();
+    let resultTabMeasure: Array<ModelTabMeasure> = id
+      ? await tabMeasure.select({
+          id,
+          tb_user_id: id_user,
+        })
+      : await tabMeasure.select();
 
     return resultTabMeasure;
   }
@@ -114,21 +115,25 @@ export class RegistrationProducts
 
     // Pegando dados da tabela Entity
     const tabCategory = new ClassHelper(NameTabCategory);
-    let resultTabCategory: Array<ModelTabCategory> = id ? await tabCategory.select({
-      id,
-      tb_user_id: id_user
-    }) : await tabCategory.select();
+    let resultTabCategory: Array<ModelTabCategory> = id
+      ? await tabCategory.select({
+          id,
+          tb_user_id: id_user,
+        })
+      : await tabCategory.select();
 
     return resultTabCategory;
   }
 
-  async search(params: {name: string , value:any}): Promise<Array<ModelTabProduct>> {
+  async search(
+    id_user: string,
+    params: { name: string; value: any }
+  ): Promise<Array<ModelTabProduct>> {
     const { ClassHelper } = await import("../Common/ClassHelper");
 
     // Pegando dados da tabela Company
     const tabProduct = new ClassHelper(NameTabProduct);
-    let resultProduct: Array<ModelTabProduct> = params ?
-      await tabProduct.selectContain(params) : await tabProduct.select()
+    let resultProduct: Array<ModelTabProduct> = await tabProduct.search({ tb_user_id: id_user }, params)
 
     return resultProduct;
   }

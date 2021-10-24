@@ -96,7 +96,6 @@ export class ClassHelper implements ControllerClassHelper {
   async select(
     param?: Record<string, unknown>
   ): Promise<ModelClassHelper | any> {
-    
     const { data, error } = await supabase
       .from(this.pNameTable)
       .select()
@@ -120,31 +119,40 @@ export class ClassHelper implements ControllerClassHelper {
     return data;
   }
 
-  async selectContain(
-    param: {name: string, value: any}
-  ): Promise<ModelClassHelper | any> {    
-    const { data, error } = await supabase
-      .from(this.pNameTable)
-      .select()
-      .in(param.name, param.value);
+  async search(
+    where: Record<string, any>,
+    param: {
+      name: string;
+      value: any;
+    }
+  ): Promise<ModelClassHelper | any> {
+    console.log('param.value =>', param.value)
+    where = where ? where : {};
+    const { data, error } =
+      param.value
+        ? await supabase
+            .from(this.pNameTable)
+            .select()
+            .ilike(param.name, `%${param.value}%`)
+            .match(where)
+        : await supabase.from(this.pNameTable).select().match(where);
 
-      console.log('data', data)
-    // if (error) {
-    //   console.error({
-    //     message: `Erro => ${error.message}`,
-    //     origin: "ClassHelper => selectContain",
-    //   });
-    //   throw new Error(
-    //     "Ocorreu um erro desconhecido, por favor contacte o suporte"
-    //   );
-    // }
+    if (error) {
+      console.error({
+        message: `Erro => ${error.message}`,
+        origin: "ClassHelper => search",
+      });
+      throw new Error(
+        "Ocorreu um erro desconhecido, por favor contacte o suporte"
+      );
+    }
 
-    // if (!data)
-    //   throw new Error(
-    //     "Ocorreu um problema na busca dos dados, contacte o suporte"
-    //   );
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na busca dos dados, contacte o suporte"
+      );
 
-    // return data;
+    return data;
   }
   async delete(id: Record<string, any>): Promise<boolean> {
     // Faz todas as validações de UPDATE

@@ -1,7 +1,7 @@
 import { CheckCircleOutlined, CloseCircleOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Button, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { useEffect, useState } from "react";
+import { KeyboardEventHandler, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ModelTabProduct } from "../../../../domain/Produtc/models/ModelTabProduct";
 import { ModelTabInstitutionHasUser } from "../../../../domain/User/models/ModelTabInstitutionHasUser";
@@ -117,7 +117,7 @@ export const FormStateListProducts = ({
               icon: "success",
             });
             loadData()
-          } catch (error) {
+          } catch (error:any) {
             toast.error(error)
           }
         }
@@ -125,9 +125,8 @@ export const FormStateListProducts = ({
   }
 
   const hadleSearchProduct = async (description: string) => {
-    if (!description) return
     setIsLoadingSearch(true)
-    const data = await registrationProducts.search({ name: 'description', value: description });
+    const data = await registrationProducts.search(idUser, { name: 'description', value: description });
     if(data){
       setDataListProducts(data);
     }
