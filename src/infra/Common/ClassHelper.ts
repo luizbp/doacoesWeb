@@ -126,25 +126,25 @@ export class ClassHelper implements ControllerClassHelper {
     const { data, error } = await supabase
       .from(this.pNameTable)
       .select()
-      .filter(param.name, 'in', param.value);
+      .in(param.name, param.value);
 
       console.log('data', data)
-    if (error) {
-      console.error({
-        message: `Erro => ${error.message}`,
-        origin: "ClassHelper => selectContain",
-      });
-      throw new Error(
-        "Ocorreu um erro desconhecido, por favor contacte o suporte"
-      );
-    }
+    // if (error) {
+    //   console.error({
+    //     message: `Erro => ${error.message}`,
+    //     origin: "ClassHelper => selectContain",
+    //   });
+    //   throw new Error(
+    //     "Ocorreu um erro desconhecido, por favor contacte o suporte"
+    //   );
+    // }
 
-    if (!data)
-      throw new Error(
-        "Ocorreu um problema na busca dos dados, contacte o suporte"
-      );
+    // if (!data)
+    //   throw new Error(
+    //     "Ocorreu um problema na busca dos dados, contacte o suporte"
+    //   );
 
-    return data;
+    // return data;
   }
   async delete(id: Record<string, any>): Promise<boolean> {
     // Faz todas as validações de UPDATE
