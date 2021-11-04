@@ -136,7 +136,8 @@ export const FormStateListProducts = ({
   return (
     <>
       {/* TODO: Pegar o campo de limite de conferencias cadastradas ta tabela */}
-      <Button disabled={dataListProducts.length >= 4} className="button-new" onClick={handleNewProduct}>
+      {/* TODO: Falta colocar paginação */}
+      <Button disabled={dataListProducts.length >= 10} className="button-new" onClick={handleNewProduct}>
         <UserAddOutlined />
         Nova
       </Button>

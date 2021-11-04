@@ -128,7 +128,7 @@ export const FormStateCadProducts = ({
                     />
                   </Form.Item>
 
-                  <Form.Item label="Categoria">
+                  <Form.Item label="Unidade de medida">
                     <Select
                         style={{ width: 200 }}
                         placeholder="Selecione..."
@@ -147,7 +147,7 @@ export const FormStateCadProducts = ({
                         })}
                       </Select>
                   </Form.Item>
-                  <Form.Item label="Unidade de medida">
+                  <Form.Item label="Categoria">
                     <Select
                       style={{ width: 200 }}
                       placeholder="Selecione..."
