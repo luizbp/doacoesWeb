@@ -1,4 +1,4 @@
-import { ControllerUserAuthenticator } from "../../../../domain/Autenticador/controllers/ControllerUserAuthenticator";
+import { ControllerUserAuthenticator } from "../../../../domain/Authenticator/controllers/ControllerUserAuthenticator";
 
 
 export type TypeHomeParams = {

@@ -1,6 +1,6 @@
 import type { TypeLoginParams } from "./types/TypeLoginParams";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
@@ -8,12 +8,12 @@ import toast, { Toaster } from "react-hot-toast";
 import logoImg from "../../assets/images/Logo.svg";
 
 import "./index.scss";
-import { IlustracaoInicial } from "../../camponents/IlustracaoInicial";
+import { IlustracaoInicial } from "../../components/IlustracaoInicial";
 import { FormStatesLogin } from "./FormStates/FormStatesLogin";
 import { FormStatesRegistration } from "./FormStates/FormStatesRegistration";
 import { FormStatesChangePassword } from "./FormStates/FormStatesChangePassword";
 import { TypeParams } from "./types/TypeParams";
-
+  
 export function PageLogin(
   { userAuthenticator }: TypeLoginParams
 ) {
@@ -37,14 +37,13 @@ export function PageLogin(
   };
 
   const verifyFormState = () => {
-    return <FormStatesLogin userAuthenticator={userAuthenticator} />;
-    // if (pStateForm === "login" || !pStateForm) {
-    //   return <FormStatesLogin userAuthenticator={userAuthenticator} />;
-    // } else if (pStateForm === "register") {
-    //   return <FormStatesRegistration userAuthenticator={userAuthenticator}/>;
-    // } else {
-    //   return <FormStatesChangePassword userAuthenticator={userAuthenticator} />;
-    // }
+    if (pStateForm === "login" || !pStateForm) {
+      return <FormStatesLogin userAuthenticator={userAuthenticator} />;
+    } else if (pStateForm === "register") {
+      return <FormStatesRegistration userAuthenticator={userAuthenticator}/>;
+    } else {
+      return <FormStatesChangePassword userAuthenticator={userAuthenticator} />;
+    }
   };
 
   return (
