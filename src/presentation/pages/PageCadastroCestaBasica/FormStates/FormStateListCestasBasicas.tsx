@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ModelTabInstitutionHasUser } from "../../../../domain/User/models/ModelTabInstitutionHasUser";
 import { RegistrationBasicBasket } from "../../../../infra/Product/RegistrationBasicBasket";
-import { TypeFormStateListConferences } from "../types/TypeCadastroConferenciaParams";
+import { TypeFormStateListConferences } from "../types/TypeCadCestasBasicasParams";
 
-export const FormStateListConferences = ({
+export const FormStateListCestasBasicas = ({
   registrationConference,
   userAuthenticator,
 }: TypeFormStateListConferences) => {

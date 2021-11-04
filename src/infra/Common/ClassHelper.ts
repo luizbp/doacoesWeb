@@ -119,6 +119,33 @@ export class ClassHelper implements ControllerClassHelper {
     return data;
   }
 
+  async selectGraphQL(
+    param?: Record<string, unknown>,
+    query?: string
+  ): Promise<ModelClassHelper | any> {
+    const { data, error } = await supabase
+      .from(this.pNameTable)
+      .select(query ? query : '')
+      .match(param ? param : {});
+
+    if (error) {
+      console.error({
+        message: `Erro => ${error.message}`,
+        origin: "ClassHelper => select",
+      });
+      throw new Error(
+        "Ocorreu um erro desconhecido, por favor contacte o suporte"
+      );
+    }
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na busca dos dados, contacte o suporte"
+      );
+
+    return data;
+  }
+
   async search(
     where: Record<string, any>,
     param: {
