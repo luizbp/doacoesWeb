@@ -16,7 +16,7 @@ const { Content, Footer } = Layout;
 
 export const PageCadastroCestaBasica = ({
   userAuthenticator,
-  registrationConference,
+  registrationBasicBasket,
 }: TypeCadastroConferenciaParams) => {
   const { idRegistry } = useParams<TypeParamsCadCestasBasicas>();
 
@@ -24,7 +24,7 @@ export const PageCadastroCestaBasica = ({
     if (idRegistry) {
       return (
         <FormStateCadCestasBasicas
-          registrationConference={registrationConference}
+          registrationBasicBasket={registrationBasicBasket}
           userAuthenticator={userAuthenticator}
           idConferencia={idRegistry}
         />
@@ -32,7 +32,7 @@ export const PageCadastroCestaBasica = ({
     } else {
       return (
         <FormStateListCestasBasicas
-          registrationConference={registrationConference}
+          registrationBasicBasket={registrationBasicBasket}
           userAuthenticator={userAuthenticator}
         />
       );

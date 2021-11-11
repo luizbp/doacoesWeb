@@ -37,6 +37,9 @@ export const CustomMenu = () => {
           <Menu.Item key="cadastro_produtos" icon={<DropboxOutlined />}>
               Cadastro de produtos
           </Menu.Item>
+          <Menu.Item key="cadastro_cesta_basica" icon={<DropboxOutlined />}>
+              Cadastro de cestas básicas
+          </Menu.Item>
         </Menu>
       </Sider>
     </>

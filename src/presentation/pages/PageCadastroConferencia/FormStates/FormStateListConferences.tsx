@@ -70,12 +70,6 @@ export const FormStateListConferences = ({
     const { idUser } = await userAuthenticator.getUserSession();
     const data = await registrationConference.getList(idUser);
     setDataListConference(data);
-
-
-    // Só pra teste
-    const teste = new RegistrationBasicBasket()
-    let retorno = await teste.getList(idUser)
-    console.log('TESTE RETORNO => ', retorno)
   };
 
   const handleNewConference = () => {

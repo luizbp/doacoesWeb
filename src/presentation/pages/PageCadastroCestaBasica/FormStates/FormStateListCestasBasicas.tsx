@@ -3,26 +3,27 @@ import { Button, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { ModelTabInstitutionHasUser } from "../../../../domain/User/models/ModelTabInstitutionHasUser";
+import { ModelTabBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
 import { RegistrationBasicBasket } from "../../../../infra/Product/RegistrationBasicBasket";
-import { TypeFormStateListConferences } from "../types/TypeCadCestasBasicasParams";
+import { TypeFormStateListCestasBasicas } from "../types/TypeCadCestasBasicasParams";
 
 export const FormStateListCestasBasicas = ({
-  registrationConference,
+  registrationBasicBasket,
   userAuthenticator,
-}: TypeFormStateListConferences) => {
+}: TypeFormStateListCestasBasicas) => {
   const history = useHistory()
 
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [isSaveLoading, setSaveLoading] = useState(false);
-  const [dataListConference, setDataListConference] = useState<
-    Array<ModelTabInstitutionHasUser>
+  const [dataListBasicBasket, setDataListBasicBasket] = useState<
+    Array<ModelTabBasicBasket>
   >([
     {
-      tb_user_id: "",
-      tb_institution_id: "",
-      kind: "",
-      active: ""
+      id: '',
+      description: '',
+      identifier: '',
+      tb_user_id: '',
+      active: true
     },
   ]);
 
@@ -30,18 +31,18 @@ export const FormStateListCestasBasicas = ({
     loadData()
   }, [])
 
-  const columns: ColumnsType<ModelTabInstitutionHasUser> = [
+  const columns: ColumnsType<ModelTabBasicBasket> = [
     {
-      title: "ID Conferencia",
+      title: "ID",
       width: 30,
-      dataIndex: "tb_institution_id",
-      key: "tb_institution_id",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: "Nome Conferencia",
+      title: "Descrição Cesta Básica",
       width: 70,
-      dataIndex: "kind",
-      key: "kind",
+      dataIndex: "description",
+      key: "description",
     },
     {
       title: "Ativa",
@@ -62,14 +63,14 @@ export const FormStateListCestasBasicas = ({
       fixed: 'right',
       width: 10,
       align: 'center',
-      render: (data) => <Link to={`/cadastro_conferencia/${data.tb_institution_id}`}>Alterar</Link>,
+      render: (data) => <Link to={`/cadastro_cesta_basica/${data.id}`}>Alterar</Link>,
     }
   ];
 
   const loadData = async () => {
     const { idUser } = await userAuthenticator.getUserSession();
-    const data = await registrationConference.getList(idUser);
-    setDataListConference(data);
+    const data = await registrationBasicBasket.getList(idUser);
+    setDataListBasicBasket(data);
 
 
     // Só pra teste
@@ -78,20 +79,20 @@ export const FormStateListCestasBasicas = ({
     console.log('TESTE RETORNO => ', retorno)
   };
 
-  const handleNewConference = () => {
-    history.push('/cadastro_conferencia/novo')
+  const handleNewBasicBasket = () => {
+    history.push('/cadastro_cesta_basica/novo')
   }
 
   return (
     <>
       {/* TODO: Pegar o campo de limite de conferencias cadastradas ta tabela */}
-      <Button disabled={dataListConference.length >= 4} className="button-new" onClick={handleNewConference}>
+      <Button disabled={dataListBasicBasket.length >= 4} className="button-new" onClick={handleNewBasicBasket}>
         <UserAddOutlined />
         Nova
       </Button>
       <Table
         columns={columns}
-        dataSource={dataListConference}
+        dataSource={dataListBasicBasket}
         scroll={{ x: 1500, y: 300 }}
       />
     </>

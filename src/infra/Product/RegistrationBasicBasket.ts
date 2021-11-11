@@ -153,20 +153,29 @@ export class RegistrationBasicBasket
     const { ClassHelper } = await import("../Common/ClassHelper");
 
     // Pegando dados da tabela Company
-    const tabBasicBasket = new ClassHelper(NameTabBasicBasketProduct);
+    const tabBasicBasket = new ClassHelper(NameTabBasicBasket);
     let resultCompany: Array<ModelTabBasicBasket> =
-      await tabBasicBasket.selectGraphQL(
-        {
-          tb_user_id: id,
-        },
-        `
-          id,
-          quantity,
-          tab_product (
-            description
-          )
-        `
-      );
+      await tabBasicBasket.select({
+        tb_user_id: id,
+      });
+
+    // const tabBasicBasketProduct = new ClassHelper(NameTabBasicBasket);
+    // let resultCompany2: Array<ModelTabBasicBasket> =
+    //   await tabBasicBasketProduct.selectGraphQL(
+    //     {
+    //       tb_user_id: id,
+    //     },
+    //     `
+    //     id,
+    //     description,
+    //     tb_basic_basket_product (
+    //       id,
+    //       description
+    //     )
+    //     `
+    //   );
+
+    //   console.log('PRODUCTSSS => ', resultCompany2)
 
     return resultCompany;
   }
