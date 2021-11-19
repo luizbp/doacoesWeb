@@ -7,11 +7,9 @@ import {
   Col,
   Card,
   Skeleton,
-  Checkbox,
 } from "antd";
 import { useEffect, useState } from "react";
 import { TypeFormStateCadCestasBasicas } from "../types/TypeCadCestasBasicasParams";
-import { MaskedInput } from "antd-mask-input";
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
@@ -45,6 +43,7 @@ export const FormStateCadCestasBasicas = ({
       try {
         const { idUser } = await userAuthenticator.getUserSession();
         const retorno = await registrationBasicBasket.get(idUser, idConferencia);
+        console.log('RETORNO => ', retorno)
         setDataCestasBasicas(retorno);
       } catch (erro: any) {
         toast.error(erro.message);

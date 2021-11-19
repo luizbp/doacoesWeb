@@ -74,9 +74,9 @@ export const FormStateListCestasBasicas = ({
 
 
     // Só pra teste
-    const teste = new RegistrationBasicBasket()
-    let retorno = await teste.getList(idUser)
-    console.log('TESTE RETORNO => ', retorno)
+    // const teste = new RegistrationBasicBasket()
+    // let retorno = await teste.getList(idUser)
+    // console.log('TESTE RETORNO => ', retorno)
   };
 
   const handleNewBasicBasket = () => {
