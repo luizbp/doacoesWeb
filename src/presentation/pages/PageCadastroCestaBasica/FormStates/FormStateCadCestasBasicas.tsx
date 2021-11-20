@@ -13,6 +13,7 @@ import { TypeFormStateCadCestasBasicas } from "../types/TypeCadCestasBasicasPara
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
+import { ListProductsBasket } from "../../../components/ListProductsBasket";
 
 export const FormStateCadCestasBasicas = ({
   registrationBasicBasket, userAuthenticator, idConferencia
@@ -128,22 +129,8 @@ export const FormStateCadCestasBasicas = ({
             <Col lg={12} md={24} className="colum-card">
               <Card title="Produtos" bordered={false}>
                 <Skeleton loading={isFormLoading} active>
-                  <Row gutter={12}>
-                    {/* <Form.Item label="Endereço">
-                      <Input
-                        placeholder="Ex: Av. São Paulo Entre a 22x20"
-                        id="address"
-                        name="address"
-                        value={dataCestasBasicas.address}
-                        readOnly={isSaveLoading}
-                        onChange={(e) =>
-                          setDataCestasBasicas({
-                            ...dataCestasBasicas,
-                            address: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Item> */}
+                  <Row>
+                    <ListProductsBasket />
                   </Row>
                 </Skeleton>
               </Card>

@@ -16,13 +16,17 @@ export function PageHome({ userAuthenticator }: TypeHomeParams) {
   const [vUser, setUser] = useState<ModelUser>();
 
   useEffect(() => {
-    getDataUser();
+    loadHome()
   }, []);
 
   const getDataUser = async () => {
     let user = await userAuthenticator.getUserSession();
     setUser(user);
   };
+
+  const loadHome = async () => {
+    await getDataUser();
+  }
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
