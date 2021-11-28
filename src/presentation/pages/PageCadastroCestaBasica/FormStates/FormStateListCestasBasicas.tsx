@@ -12,9 +12,6 @@ export const FormStateListCestasBasicas = ({
   userAuthenticator,
 }: TypeFormStateListCestasBasicas) => {
   const history = useHistory()
-
-  const [isFormLoading, setIsFormLoading] = useState(false);
-  const [isSaveLoading, setSaveLoading] = useState(false);
   const [dataListBasicBasket, setDataListBasicBasket] = useState<
     Array<ModelTabBasicBasket>
   >([
@@ -71,12 +68,6 @@ export const FormStateListCestasBasicas = ({
     const { idUser } = await userAuthenticator.getUserSession();
     const data = await registrationBasicBasket.getList(idUser);
     setDataListBasicBasket(data);
-
-
-    // Só pra teste
-    // const teste = new RegistrationBasicBasket()
-    // let retorno = await teste.getList(idUser)
-    // console.log('TESTE RETORNO => ', retorno)
   };
 
   const handleNewBasicBasket = () => {
@@ -91,6 +82,7 @@ export const FormStateListCestasBasicas = ({
         Nova
       </Button>
       <Table
+        rowKey='id'
         columns={columns}
         dataSource={dataListBasicBasket}
         scroll={{ x: 1500, y: 300 }}

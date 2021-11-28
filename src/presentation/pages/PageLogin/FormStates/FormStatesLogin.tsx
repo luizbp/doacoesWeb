@@ -6,7 +6,7 @@ import { Form, Input } from "antd";
 import {CustomButton} from '../../../components/CustomButton'
 
 import "../index.scss";
-import { loadSessionStoraga } from "../../../../infra/Common/loadSessionStoraga";
+import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
 
 export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,9 @@ export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
       });
       setLoading(false);
       if (user) {
-        loadSessionStoraga(user.idUser)
+        const session = new LoadSessionStorage()
+        await session.loadProducts(user.idUser)
+
         history.push("/home");
       }
     } catch (error:any) {

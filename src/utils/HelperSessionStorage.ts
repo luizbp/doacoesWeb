@@ -1,45 +1,32 @@
-export class HelperSessionStorage{
-    public save(key: string, value: any){
+export class HelperSessionStorage {
+  public save(key: string, value: any) {
+    try {
+      sessionStorage.setItem(
+        key,
+        JSON.stringify({
+          value,
+        })
+      );
 
-        try{
-            let valueN
-
-            if(typeof value === 'object'){
-                valueN = JSON.stringify(value)
-            }else{
-                valueN = value
-            }
-
-            sessionStorage.setItem(key, valueN)
-
-            return true
-        }catch (error){
-            console.error(error)
-            throw new Error('Erro ao acessar o session storage - SET');
-        }
+      return true;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Erro ao acessar o session storage - SET");
     }
+  }
 
+  public get(key: string): any {
+    try {
+      const value = sessionStorage.getItem(key);
 
-    public get(key:string):any{
-        try{
+      if (!value) throw new Error("Item não encontrado");
 
-            const value = sessionStorage.getItem(key)
+      let valueN = JSON.parse(value);
 
-            if(!value) throw new Error("Item não encontrado");
-
-            let valueN
-
-            if(typeof value === 'object'){
-                valueN = JSON.parse(value)
-            }else{
-                valueN = value
-            }
-
-            return valueN
-
-        }catch (error){
-            console.error(error)
-            throw new Error('Erro ao acessar o session storage - GET');
-        }
+      return valueN.value;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Erro ao acessar o session storage - GET");
     }
+  }
 }

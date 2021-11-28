@@ -1,51 +1,83 @@
 import toast, { Toaster } from "react-hot-toast";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Card,
-  Skeleton,
-} from "antd";
+import { Form, Input, Button, Row, Col, Card, Skeleton, Select } from "antd";
 import { useEffect, useState } from "react";
 import { TypeFormStateCadCestasBasicas } from "../types/TypeCadCestasBasicasParams";
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
 import { ListProductsBasket } from "../../../components/ListProductsBasket";
+import { TypeListProductsBasket } from "../../../components/ListProductsBasket/types/Types";
+import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
+import { CheckCircleOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 export const FormStateCadCestasBasicas = ({
-  registrationBasicBasket, userAuthenticator, idConferencia
+  registrationBasicBasket,
+  userAuthenticator,
+  idConferencia,
 }: TypeFormStateCadCestasBasicas) => {
-
   const history = useHistory();
-  
-  const [isFormLoading, setIsFormLoading] = useState(false);
-  const [isSaveLoading, setSaveLoading] = useState(false);
 
+  // Responsavel por informar se o form esta em carregamento
+  const [isFormLoading, setIsFormLoading] = useState(false);
+  // Responsável por informar se o form está sendo gravado
+  const [isSaveLoading, setSaveLoading] = useState(false);
+  // Informações da cesta básica
   const [dataCestasBasicas, setDataCestasBasicas] =
     useState<ModelTabBasicBasket>({
       id: "",
       active: true,
-      description: '',
-      identifier: '',
+      description: "",
+      identifier: "",
       produtos: [],
-      tb_user_id: ''
+      tb_user_id: "",
     });
+
+  const [dataProducts, setDataProducts] = useState<
+    Array<TypeListProductsBasket>
+  >([]);
+  const [infosProducts, setInfosProducts] = useState<
+    Array<TypeListProductsBasket>
+  >([]);
+
+  const [selectedProduct, setSelectedProduct] = useState<string>('')
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
-    if(idConferencia !== 'novo'){
+    if (idConferencia !== "novo") {
       setIsFormLoading(true);
       try {
         const { idUser } = await userAuthenticator.getUserSession();
-        const retorno = await registrationBasicBasket.get(idUser, idConferencia);
-        console.log('RETORNO => ', retorno)
+        const retorno = await registrationBasicBasket.get(
+          idUser,
+          idConferencia
+        );
         setDataCestasBasicas(retorno);
+
+        //Carrega informações dos produtos
+        const session = new LoadSessionStorage();
+        const pInfosProducts = await session.getProducts();
+        setInfosProducts(pInfosProducts);
+        const listProducts: any = [];
+
+        retorno.produtos?.forEach((e) => {
+          let description = pInfosProducts.filter(
+            (value: any) => {
+              return (value.id === e.tb_product_id)
+            }
+          )[0].description;
+          listProducts.push({
+            id: e.tb_product_id,
+            description,
+          });
+        });
+
+        setDataProducts(listProducts)
+
       } catch (erro: any) {
         toast.error(erro.message);
       }
@@ -57,7 +89,11 @@ export const FormStateCadCestasBasicas = ({
     try {
       setSaveLoading(true);
       const { idUser } = await userAuthenticator.getUserSession();
-      const retorno = await registrationBasicBasket.save(idUser, idConferencia, dataCestasBasicas);
+      const retorno = await registrationBasicBasket.save(
+        idUser,
+        idConferencia,
+        dataCestasBasicas
+      );
       if (!retorno)
         toast.error(
           "Ocorreu um erro, tente novamente mais tarde, ou contacte o suporte"
@@ -75,13 +111,32 @@ export const FormStateCadCestasBasicas = ({
     swal({
       title: "Atenção, todos os dados não salvos seram perdidos?",
       icon: "info",
-      buttons: ['Cancelar', true],
+      buttons: ["Cancelar", true],
     }).then(async (willDelete) => {
       if (willDelete) {
         history.go(-1);
       }
     });
   };
+
+  const generateOptions = (value: any) => {
+    return value.map((item: any) => {
+      return (
+        <Option key={item.id} value={item.id}>
+          {item.description}
+        </Option>
+      );
+    });
+  };
+
+
+  const addProduct = (value: any) => {
+
+  }
+
+  const removeProduct = (value: any) => {
+
+  }
 
   return (
     <section className="configuracoes-conta">
@@ -129,8 +184,28 @@ export const FormStateCadCestasBasicas = ({
             <Col lg={12} md={24} className="colum-card">
               <Card title="Produtos" bordered={false}>
                 <Skeleton loading={isFormLoading} active>
+                  <Form.Item>
+                    <Row>
+                      <Col lg={20} md={24}>
+                        <Select
+                          placeholder="Selecione..."
+                          value={selectedProduct}
+                          onChange={(e) =>
+                            setSelectedProduct(e ? e.toString() : "")
+                          }
+                        >
+                          {generateOptions(infosProducts)}
+                        </Select>
+                      </Col>
+                      <Col lg={4} md={24}>
+                        <Button type="primary" icon={<CheckCircleOutlined />} >
+                          Adicionar
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Item>
                   <Row>
-                    <ListProductsBasket />
+                    <ListProductsBasket ListData={dataProducts} />
                   </Row>
                 </Skeleton>
               </Card>

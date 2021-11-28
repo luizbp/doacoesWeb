@@ -1,4 +1,4 @@
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   Form,
   Input,
@@ -12,40 +12,40 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { TypeFormStateCadProducts } from "../types/TypeCadProductsParams";
-import { MaskedInput } from "antd-mask-input";
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabProduct } from "../../../../domain/Produtc/models/ModelTabProduct";
 import { RedoOutlined } from "@ant-design/icons";
 import { ModelTabMeasure } from "../../../../domain/Produtc/models/ModelTabMeasure";
 import { ModelTabCategory } from "../../../../domain/Produtc/models/ModelTabCategory";
+import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
 
 const { Option } = Select;
 
 export const FormStateCadProducts = ({
-  registrationProducts, userAuthenticator, idConferencia
+  registrationProducts,
+  userAuthenticator,
+  idConferencia,
 }: TypeFormStateCadProducts) => {
-
   const history = useHistory();
-  
+
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [isSaveLoading, setSaveLoading] = useState(false);
-  const [linkPreviewImagem, setLinkPreviewImagem] = useState('');
+  const [linkPreviewImagem, setLinkPreviewImagem] = useState("");
   const [measures, setMeasures] = useState<Array<ModelTabMeasure>>([]);
   const [category, setCategory] = useState<Array<ModelTabCategory>>([]);
 
-  const [dataProducts, setDataProducts] =
-    useState<ModelTabProduct>({
-      id: '',
-      identifier: '',
-      tb_user_id: '',
-      description: '',
-      tb_category_id: '',
-      tb_measure_id: '',
-      active: true,
-      note: '',
-      link_image: '',
-    });
+  const [dataProducts, setDataProducts] = useState<ModelTabProduct>({
+    id: "",
+    identifier: "",
+    tb_user_id: "",
+    description: "",
+    tb_category_id: "",
+    tb_measure_id: "",
+    active: true,
+    note: "",
+    link_image: "",
+  });
 
   useEffect(() => {
     loadData();
@@ -53,19 +53,19 @@ export const FormStateCadProducts = ({
 
   const loadData = async () => {
     setIsFormLoading(true);
-    const measures = await registrationProducts.getMeadures();
-    const category = await registrationProducts.getCategory();
+    const pMeasures = await registrationProducts.getMeadures();
+    const pCategory = await registrationProducts.getCategory();
 
-    setCategory(category)
-    setMeasures(measures)
+    setCategory(pCategory);
+    setMeasures(pMeasures);
 
-    if(idConferencia !== 'novo'){
+    if (idConferencia !== "novo") {
       try {
         const { idUser } = await userAuthenticator.getUserSession();
         const retorno = await registrationProducts.get(idUser, idConferencia);
 
         setDataProducts(retorno);
-        setLinkPreviewImagem(retorno.link_image)
+        setLinkPreviewImagem(retorno.link_image);
       } catch (erro: any) {
         toast.error(erro.message);
       }
@@ -77,11 +77,18 @@ export const FormStateCadProducts = ({
     try {
       setSaveLoading(true);
       const { idUser } = await userAuthenticator.getUserSession();
-      const retorno = await registrationProducts.save(idUser, idConferencia, dataProducts);
+      const retorno = await registrationProducts.save(
+        idUser,
+        idConferencia,
+        dataProducts
+      );
       if (!retorno)
         toast.error(
           "Ocorreu um erro, tente novamente mais tarde, ou contacte o suporte"
         );
+
+      const session = new LoadSessionStorage();
+      await session.loadProducts(idUser);
 
       toast.success("Dados Atualizados com sucesso!!");
       history.go(-1);
@@ -93,14 +100,24 @@ export const FormStateCadProducts = ({
 
   const handleCancel = async () => {
     swal({
-      title: 'Atenção!',
+      title: "Atenção!",
       text: "Todos os dados não salvos seram perdidos?",
       icon: "info",
-      buttons: ['Cancelar', true],
+      buttons: ["Cancelar", true],
     }).then(async (willDelete) => {
       if (willDelete) {
         history.go(-1);
       }
+    });
+  };
+
+  const generateOptions = (value: any) => {
+    return value.map((item: any) => {
+      return (
+        <Option key={item.id} value={item.id}>
+          {item.description}
+        </Option>
+      );
     });
   };
 
@@ -130,22 +147,18 @@ export const FormStateCadProducts = ({
 
                   <Form.Item label="Unidade de medida">
                     <Select
-                        style={{ width: 200 }}
-                        placeholder="Selecione..."
-                        value={dataProducts.tb_measure_id}
-                        onChange={(e) =>
-                          setDataProducts({
-                            ...dataProducts,
-                            tb_measure_id: e ? e.toString() : '',
-                          })
-                        }
-                      >
-                        {measures.map((value) => {
-                          return (
-                            <Option key={value.id} value={value.id}>{value.description}</Option>
-                          )
-                        })}
-                      </Select>
+                      style={{ width: 200 }}
+                      placeholder="Selecione..."
+                      value={dataProducts.tb_measure_id}
+                      onChange={(e) =>
+                        setDataProducts({
+                          ...dataProducts,
+                          tb_measure_id: e ? e.toString() : "",
+                        })
+                      }
+                    >
+                      {generateOptions(measures)}
+                    </Select>
                   </Form.Item>
                   <Form.Item label="Categoria">
                     <Select
@@ -155,16 +168,13 @@ export const FormStateCadProducts = ({
                       onChange={(e) =>
                         setDataProducts({
                           ...dataProducts,
-                          tb_category_id: e ? e.toString() : '',
+                          tb_category_id: e ? e.toString() : "",
                         })
                       }
                     >
-                      {category.map((value) => {
-                        return (
-                          <Option key={value.id} value={value.id}>{value.description}</Option>
-                        )
-                      })}
-                    </Select>,
+                      {generateOptions(category)}
+                    </Select>
+                    ,
                   </Form.Item>
                   <Form.Item label="Observação">
                     <Input.TextArea
@@ -205,19 +215,29 @@ export const FormStateCadProducts = ({
                         })
                       }
                     />
-                    <Button onClick={() => setLinkPreviewImagem(dataProducts.link_image)}><RedoOutlined /> Atulizar previa</Button>
+                    <Button
+                      onClick={() =>
+                        setLinkPreviewImagem(dataProducts.link_image)
+                      }
+                    >
+                      <RedoOutlined /> Atulizar previa
+                    </Button>
                   </Form.Item>
                   <Form.Item>
-                    <Checkbox id="active"
+                    <Checkbox
+                      id="active"
                       name="active"
                       checked={dataProducts.active}
-                      onChange={(e) =>{
+                      onChange={(e) => {
                         console.log(e);
                         setDataProducts({
                           ...dataProducts,
                           active: e.target.checked,
-                        })}
-                      }>Ativa</Checkbox>
+                        });
+                      }}
+                    >
+                      Ativa
+                    </Checkbox>
                   </Form.Item>
                 </Skeleton>
               </Card>
