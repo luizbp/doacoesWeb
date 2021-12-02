@@ -1,14 +1,26 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Button, Space, Table, Tag } from "antd";
+import { useEffect, useState } from "react";
 
 import './index.scss'
-import { TypeArrayListProductsBasket } from "./types/Types";
+import { TypeArrayListProductsBasket, TypeListProductsBasket } from "./types/Types";
 
 
 
 
 
-export const ListProductsBasket = ( { ListData }: TypeArrayListProductsBasket) =>{
+export const ListProductsBasket = ( { ListData, removeAction}: TypeArrayListProductsBasket) =>{
+
+    const [data, setData] = useState<Array<TypeListProductsBasket>>([])
+
+    useEffect(() => {
+      _loadList()
+    }, [ListData])
+
+    const _loadList = () => {
+      setData(ListData)
+    }
+
     const columns = [
         {
           title: 'ID',
@@ -24,14 +36,14 @@ export const ListProductsBasket = ( { ListData }: TypeArrayListProductsBasket) =
         {
           title: '',
           key: 'action',
-          render: (text: any, record: any) => (
+          render: (text: any, item: any) => (
             <Space size="middle">
-              <a href="#" onClick={() => console.log('foi')}><CloseCircleOutlined /></a>
+              <a href="#" onClick={() => removeAction(item)}><CloseCircleOutlined /></a>
             </Space>
           ),
         },
       ];
     return(
-        <Table className='table' columns={columns} dataSource={ListData} />
+        <Table rowKey="id" className='table' columns={columns} dataSource={data} />
     )
 }

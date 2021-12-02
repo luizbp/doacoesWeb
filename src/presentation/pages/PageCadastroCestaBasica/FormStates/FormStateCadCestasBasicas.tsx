@@ -51,39 +51,35 @@ export const FormStateCadCestasBasicas = ({
     if (idConferencia !== "novo") {
       setIsFormLoading(true);
       try {
-        const { idUser } = await userAuthenticator.getUserSession();
-        const retorno = await registrationBasicBasket.get(
-          idUser,
-          idConferencia
-        );
-        setDataCestasBasicas(retorno);
-
-        //Carrega informações dos produtos
-        const session = new LoadSessionStorage();
-        const pInfosProducts = await session.getProducts();
-        setInfosProducts(pInfosProducts);
-        const listProducts: any = [];
-
-        retorno.produtos?.forEach((e) => {
-          let description = pInfosProducts.filter(
-            (value: any) => {
-              return (value.id === e.tb_product_id)
-            }
-          )[0].description;
-          listProducts.push({
-            id: e.tb_product_id,
-            description,
-          });
-        });
-
-        setDataProducts(listProducts)
-
+        await loadBasicBasket()        
       } catch (erro: any) {
         toast.error(erro.message);
       }
       setIsFormLoading(false);
     }
   };
+
+  const loadBasicBasket = async () =>{
+    const { idUser } = await userAuthenticator.getUserSession();
+    const retorno = await registrationBasicBasket.get(
+      idUser,
+      idConferencia
+    );
+    const session = new LoadSessionStorage();
+    const pInfosProducts = await session.getProducts();
+    setInfosProducts(pInfosProducts);
+
+
+    setDataCestasBasicas(retorno);
+    loadListProducts(retorno.produtos, pInfosProducts)
+  }
+
+  const loadListProducts = async (products: any, infosProducts: any) => {
+    //Carrega informações dos produtos
+    const listProducts: any = buildProductList(products, infosProducts);
+    setDataProducts(listProducts)
+    return listProducts
+  }
 
   const handleExecute = async () => {
     try {
@@ -129,13 +125,35 @@ export const FormStateCadCestasBasicas = ({
     });
   };
 
+  const buildProductList = (listIds:any, products: any) => {
+    let listReturn: any = []
+    listIds.forEach((op: any) => {
+      let description = products.filter((value: any) => {
+        console.log(' value => ', value.id, "Op => ", op.tb_product_id)
+      })
+      listReturn.push({
+        id: op.tb_product_id,
+        description: '',
+      });
+    });
 
-  const addProduct = (value: any) => {
+    return listReturn
+  }
 
+  const addProduct = (value: any, quantity: number = 0)=> {
+    let newValue = dataProducts
+    newValue?.push({
+      tb_product_id: value,
+      description: ''
+    })
+    const newListProducts: any = buildProductList(newValue, infosProducts);
+
+    setDataProducts(newListProducts)
   }
 
   const removeProduct = (value: any) => {
-
+    const teste = dataProducts?.filter((item) => item.tb_product_id != value.id)
+    setDataProducts(teste)
   }
 
   return (
@@ -198,14 +216,14 @@ export const FormStateCadCestasBasicas = ({
                         </Select>
                       </Col>
                       <Col lg={4} md={24}>
-                        <Button type="primary" icon={<CheckCircleOutlined />} >
+                        <Button type="primary" icon={<CheckCircleOutlined />} onClick={() => addProduct(selectedProduct)} >
                           Adicionar
                         </Button>
                       </Col>
                     </Row>
                   </Form.Item>
                   <Row>
-                    <ListProductsBasket ListData={dataProducts} />
+                    <ListProductsBasket  ListData={dataProducts} removeAction={removeProduct}/>
                   </Row>
                 </Skeleton>
               </Card>

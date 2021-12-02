@@ -1,9 +1,9 @@
 export type ModelTabBasicBasketProduct = {
-    id: string
+    id?: string
     tb_product_id: string
     tb_basic_basket_id: string
     quantity: number
-    active: boolean
+    active?: boolean
     created_at?: string
     updated_at?: string
 }
