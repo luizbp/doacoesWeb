@@ -4,6 +4,6 @@ export type TypeArrayListProductsBasket = {
 };
 
 export type TypeListProductsBasket = {
-  tb_product_id: string;
+  id: string;
   description: string;
 };

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { TypeFormStateCadCestasBasicas } from "../types/TypeCadCestasBasicasParams";
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
-import { ModelTabBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
+import { ModelTabBasicBasket, SubTypeProductsBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
 import { ListProductsBasket } from "../../../components/ListProductsBasket";
 import { TypeListProductsBasket } from "../../../components/ListProductsBasket/types/Types";
 import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
@@ -35,13 +35,13 @@ export const FormStateCadCestasBasicas = ({
     });
 
   const [dataProducts, setDataProducts] = useState<
-    Array<TypeListProductsBasket>
+    Array<SubTypeProductsBasicBasket>
   >([]);
   const [infosProducts, setInfosProducts] = useState<
-    Array<TypeListProductsBasket>
+    Array<SubTypeProductsBasicBasket>
   >([]);
 
-  const [selectedProduct, setSelectedProduct] = useState<string>('')
+  const [selectedProduct, setSelectedProduct] = useState<Record<string, any>>({})
 
   useEffect(() => {
     loadData();
@@ -69,17 +69,12 @@ export const FormStateCadCestasBasicas = ({
     const pInfosProducts = await session.getProducts();
     setInfosProducts(pInfosProducts);
 
-
     setDataCestasBasicas(retorno);
-    loadListProducts(retorno.produtos, pInfosProducts)
+
+    if(!retorno.produtos?.length) return
+    setDataProducts(retorno.produtos)
   }
 
-  const loadListProducts = async (products: any, infosProducts: any) => {
-    //Carrega informações dos produtos
-    const listProducts: any = buildProductList(products, infosProducts);
-    setDataProducts(listProducts)
-    return listProducts
-  }
 
   const handleExecute = async () => {
     try {
@@ -125,35 +120,22 @@ export const FormStateCadCestasBasicas = ({
     });
   };
 
-  const buildProductList = (listIds:any, products: any) => {
-    let listReturn: any = []
-    listIds.forEach((op: any) => {
-      let description = products.filter((value: any) => {
-        console.log(' value => ', value.id, "Op => ", op.tb_product_id)
-      })
-      listReturn.push({
-        id: op.tb_product_id,
-        description: '',
-      });
-    });
 
-    return listReturn
-  }
-
-  const addProduct = (value: any, quantity: number = 0)=> {
+  // ARRUMAR ESSE AIIIIIIII
+  const addProduct = (product: any, quantity: number = 0)=> {
     let newValue = dataProducts
     newValue?.push({
-      tb_product_id: value,
-      description: ''
+      ...product,
+      quantity
     })
-    const newListProducts: any = buildProductList(newValue, infosProducts);
 
-    setDataProducts(newListProducts)
+    setDataProducts(newValue)
   }
 
   const removeProduct = (value: any) => {
-    const teste = dataProducts?.filter((item) => item.tb_product_id != value.id)
-    setDataProducts(teste)
+    console.log('dataProducts => ', dataProducts)
+    const newValue = dataProducts?.filter((item) => item.id != value.id)
+    setDataProducts(newValue)
   }
 
   return (
@@ -207,9 +189,13 @@ export const FormStateCadCestasBasicas = ({
                       <Col lg={20} md={24}>
                         <Select
                           placeholder="Selecione..."
-                          value={selectedProduct}
-                          onChange={(e) =>
-                            setSelectedProduct(e ? e.toString() : "")
+                          value={selectedProduct.id}
+                          
+                          onChange={(e, { children }: any) =>
+                            setSelectedProduct(e ? {
+                              id: e.toString(),
+                              description: children
+                            } : {id: '', description: ''})
                           }
                         >
                           {generateOptions(infosProducts)}

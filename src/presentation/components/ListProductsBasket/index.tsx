@@ -18,9 +18,11 @@ export const ListProductsBasket = ( { ListData, removeAction}: TypeArrayListProd
     }, [ListData])
 
     const _loadList = () => {
+      console.log("ListData => ", ListData)
       setData(ListData)
     }
 
+    
     const columns = [
         {
           title: 'ID',
@@ -32,6 +34,16 @@ export const ListProductsBasket = ( { ListData, removeAction}: TypeArrayListProd
           title: 'Descrição',
           dataIndex: 'description',
           key: 'description',
+        },
+        {
+          title: 'Quantidade',
+          dataIndex: 'quantity',
+          key: 'quantity',
+        },
+        {
+          title: 'Un. Medida',
+          dataIndex: 'measure',
+          key: 'measure',
         },
         {
           title: '',

@@ -12,6 +12,7 @@ import {
 import { ControllerRegistrationBasicBasket } from "../../domain/Produtc/controller/ControllerRegistrationBasicBasket";
 
 import { checkFields } from "../Common/checkFilds";
+import { LoadSessionStorage } from "../Common/LoadSessionStorage";
 
 export class RegistrationBasicBasket
   implements ControllerRegistrationBasicBasket {
@@ -87,7 +88,6 @@ export class RegistrationBasicBasket
     // return true
   }
 
-
   async get(id_user: string, id_basic_basket: string): Promise<ModelTabBasicBasket> {
     // throw new Error("Method not implemented.");
     const { ClassHelper } = await import("../Common/ClassHelper");
@@ -104,6 +104,13 @@ export class RegistrationBasicBasket
       tb_basic_basket_id: id_basic_basket,
     });
 
+    const session = new LoadSessionStorage();
+    const pInfosProducts = await session.getProducts();
+    
+
+    const products = await this.buildProductList(checkFields(resultBasicBasketProduct, []), pInfosProducts)
+    console.log("pInfosProducts => ", pInfosProducts)
+
 
     return {
       id: checkFields(resultBasicBasket[0].id, ''),
@@ -111,7 +118,7 @@ export class RegistrationBasicBasket
       active: checkFields(resultBasicBasket[0].active, ''),
       identifier: checkFields(resultBasicBasket[0].identifier, ''),
       tb_user_id: checkFields(resultBasicBasket[0].tb_user_id, ''),
-      produtos: checkFields(resultBasicBasketProduct, []),
+      produtos: products,
     };
   }
 
@@ -125,24 +132,25 @@ export class RegistrationBasicBasket
         tb_user_id: id,
       });
 
-    // const tabBasicBasketProduct = new ClassHelper(NameTabBasicBasket);
-    // let resultCompany2: Array<ModelTabBasicBasket> =
-    //   await tabBasicBasketProduct.selectGraphQL(
-    //     {
-    //       tb_user_id: id,
-    //     },
-    //     `
-    //     id,
-    //     description,
-    //     tb_basic_basket_product (
-    //       id,
-    //       description
-    //     )
-    //     `
-    //   );
-
-    //   console.log('PRODUCTSSS => ', resultCompany2)
-
     return resultCompany;
+  }
+
+  private buildProductList = async (listIds:any, products: any) => {    
+    
+    if(!listIds.length || !products.length) return []
+
+    let listReturn: any = []
+    listIds.forEach((op: any) => {
+      let product = products.filter((value: any) => value.id === op.tb_product_id)
+
+      listReturn.push({
+        id: op.tb_product_id,
+        description: product[0].description,
+        quantity: op.quantity,
+        measure: product[0].measure
+      });
+    });
+
+    return listReturn
   }
 }

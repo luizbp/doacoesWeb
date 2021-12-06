@@ -6,7 +6,15 @@ export type ModelTabBasicBasket = {
     tb_user_id: string
     description: string
     active: boolean
-    produtos?: Array<ModelTabBasicBasketProduct>
+    produtos?: Array<SubTypeProductsBasicBasket>
     created_at?: string
     updated_at?: string
+}
+
+
+export type SubTypeProductsBasicBasket = {
+    id: string
+    description: string
+    quantity: number,
+    measure: string
 }
