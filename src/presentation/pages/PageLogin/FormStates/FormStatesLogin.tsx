@@ -6,7 +6,7 @@ import { Form, Input } from "antd";
 import {CustomButton} from '../../../components/CustomButton'
 
 import "../index.scss";
-import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
+import { LoadLocalStorage } from "../../../../infra/Common/LoadLocalStorage";
 
 export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export const FormStatesLogin = ({ userAuthenticator }: TypeLoginParams) => {
       });
       setLoading(false);
       if (user) {
-        const session = new LoadSessionStorage()
+        const session = new LoadLocalStorage()
         await session.loadProducts(user.idUser)
 
         history.push("/home");

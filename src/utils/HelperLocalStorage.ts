@@ -1,7 +1,7 @@
-export class HelperSessionStorage {
+export class HelperLocalStorage {
   public save(key: string, value: any) {
     try {
-      sessionStorage.setItem(
+      localStorage.setItem(
         key,
         JSON.stringify({
           value,
@@ -11,13 +11,13 @@ export class HelperSessionStorage {
       return true;
     } catch (error) {
       console.error(error);
-      throw new Error("Erro ao acessar o session storage - SET");
+      throw new Error("Erro ao acessar o local storage - SET");
     }
   }
 
   public get(key: string): any {
     try {
-      const value = sessionStorage.getItem(key);
+      const value = localStorage.getItem(key);
 
       if (!value) throw new Error("Item não encontrado");
 
@@ -26,7 +26,7 @@ export class HelperSessionStorage {
       return valueN.value;
     } catch (error) {
       console.error(error);
-      throw new Error("Erro ao acessar o session storage - GET");
+      throw new Error("Erro ao acessar o local storage - GET");
     }
   }
 }

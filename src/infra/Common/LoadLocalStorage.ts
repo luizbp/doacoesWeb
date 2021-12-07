@@ -1,12 +1,12 @@
 import { KEY_MEASURES_SESSION, KEY_PRODUCTS_SESSION } from "../../domain/Common/variables/SessionVariables";
-import { HelperSessionStorage } from "../../utils/HelperSessionStorage";
+import { HelperLocalStorage } from "../../utils/HelperLocalStorage";
 import { RegistrationProducts } from "../Product/RegistrationProducts";
 
-export class LoadSessionStorage {
+export class LoadLocalStorage {
   private helperSession: any
 
   constructor() {
-    this.helperSession = new HelperSessionStorage();
+    this.helperSession = new HelperLocalStorage();
   }
 
   public loadProducts = async (id_user: string) => {

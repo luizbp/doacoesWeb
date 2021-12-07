@@ -6,9 +6,8 @@ import swal from "sweetalert";
 import { useHistory } from "react-router-dom";
 import { ModelTabBasicBasket, SubTypeProductsBasicBasket } from "../../../../domain/Produtc/models/ModelTabBasicBasket";
 import { ListProductsBasket } from "../../../components/ListProductsBasket";
-import { TypeListProductsBasket } from "../../../components/ListProductsBasket/types/Types";
-import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { LoadLocalStorage } from "../../../../infra/Common/LoadLocalStorage";
+import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -42,6 +41,7 @@ export const FormStateCadCestasBasicas = ({
   >([]);
 
   const [selectedProduct, setSelectedProduct] = useState<Record<string, any>>({})
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(0)
 
   useEffect(() => {
     loadData();
@@ -65,7 +65,7 @@ export const FormStateCadCestasBasicas = ({
       idUser,
       idConferencia
     );
-    const session = new LoadSessionStorage();
+    const session = new LoadLocalStorage();
     const pInfosProducts = await session.getProducts();
     setInfosProducts(pInfosProducts);
 
@@ -113,13 +113,12 @@ export const FormStateCadCestasBasicas = ({
   const generateOptions = (value: any) => {
     return value.map((item: any) => {
       return (
-        <Option key={item.id} value={item.id}>
+        <Option key={item.id} value={item.id} measure={item.measure}>
           {item.description}
         </Option>
       );
     });
   };
-
 
   // ARRUMAR ESSE AIIIIIIII
   const addProduct = (product: any, quantity: number = 0)=> {
@@ -184,30 +183,44 @@ export const FormStateCadCestasBasicas = ({
             <Col lg={12} md={24} className="colum-card">
               <Card title="Produtos" bordered={false}>
                 <Skeleton loading={isFormLoading} active>
-                  <Form.Item>
                     <Row>
-                      <Col lg={20} md={24}>
-                        <Select
-                          placeholder="Selecione..."
-                          value={selectedProduct.id}
-                          
-                          onChange={(e, { children }: any) =>
-                            setSelectedProduct(e ? {
-                              id: e.toString(),
-                              description: children
-                            } : {id: '', description: ''})
-                          }
-                        >
-                          {generateOptions(infosProducts)}
-                        </Select>
+                      <Col lg={16} md={24}>
+                        <Form.Item label="Produto">
+                          <Select
+                            placeholder="Selecione..."
+                            value={selectedProduct.id}
+                            onChange={(e, { children, measure}: any) =>
+                              setSelectedProduct(e ? {
+                                id: e.toString(),
+                                description: children,
+                                measure
+                              } : {id: '', description: '', measure: ''})
+                            }
+                          >
+                            {generateOptions(infosProducts)}
+                          </Select>
+                        </Form.Item>
                       </Col>
                       <Col lg={4} md={24}>
-                        <Button type="primary" icon={<CheckCircleOutlined />} onClick={() => addProduct(selectedProduct)} >
-                          Adicionar
-                        </Button>
+                        <Form.Item label="Quantidade">
+                          <Input
+                            id="quantity"
+                            name="quantity"
+                            type="number"
+                            value={selectedQuantity}
+                            readOnly={isSaveLoading}
+                            onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col lg={4} md={24}>
+                        <Form.Item label=" ">
+                          <Button type="primary" icon={<PlusOutlined />} onClick={() => addProduct(selectedProduct, selectedQuantity)} >
+                            Adicionar
+                          </Button>
+                        </Form.Item>
                       </Col>
                     </Row>
-                  </Form.Item>
                   <Row>
                     <ListProductsBasket  ListData={dataProducts} removeAction={removeProduct}/>
                   </Row>

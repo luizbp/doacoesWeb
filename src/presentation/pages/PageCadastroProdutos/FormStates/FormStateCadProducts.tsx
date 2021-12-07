@@ -18,7 +18,7 @@ import { ModelTabProduct } from "../../../../domain/Produtc/models/ModelTabProdu
 import { RedoOutlined } from "@ant-design/icons";
 import { ModelTabMeasure } from "../../../../domain/Produtc/models/ModelTabMeasure";
 import { ModelTabCategory } from "../../../../domain/Produtc/models/ModelTabCategory";
-import { LoadSessionStorage } from "../../../../infra/Common/LoadSessionStorage";
+import { LoadLocalStorage } from "../../../../infra/Common/LoadLocalStorage";
 
 const { Option } = Select;
 
@@ -87,7 +87,7 @@ export const FormStateCadProducts = ({
           "Ocorreu um erro, tente novamente mais tarde, ou contacte o suporte"
         );
 
-      const session = new LoadSessionStorage();
+      const session = new LoadLocalStorage();
       await session.loadProducts(idUser);
 
       toast.success("Dados Atualizados com sucesso!!");

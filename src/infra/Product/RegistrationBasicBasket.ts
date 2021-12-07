@@ -12,7 +12,7 @@ import {
 import { ControllerRegistrationBasicBasket } from "../../domain/Produtc/controller/ControllerRegistrationBasicBasket";
 
 import { checkFields } from "../Common/checkFilds";
-import { LoadSessionStorage } from "../Common/LoadSessionStorage";
+import { LoadLocalStorage } from "../Common/LoadLocalStorage";
 
 export class RegistrationBasicBasket
   implements ControllerRegistrationBasicBasket {
@@ -104,7 +104,7 @@ export class RegistrationBasicBasket
       tb_basic_basket_id: id_basic_basket,
     });
 
-    const session = new LoadSessionStorage();
+    const session = new LoadLocalStorage();
     const pInfosProducts = await session.getProducts();
     
 
