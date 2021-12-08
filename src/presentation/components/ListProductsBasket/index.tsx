@@ -18,7 +18,6 @@ export const ListProductsBasket = ( { ListData, removeAction}: TypeArrayListProd
     }, [ListData])
 
     const _loadList = () => {
-      console.log("ListData => ", ListData)
       setData(ListData)
     }
 

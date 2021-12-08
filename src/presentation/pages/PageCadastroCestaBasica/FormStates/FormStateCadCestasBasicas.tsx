@@ -51,7 +51,7 @@ export const FormStateCadCestasBasicas = ({
     if (idConferencia !== "novo") {
       setIsFormLoading(true);
       try {
-        await loadBasicBasket()        
+        await loadBasicBasket()
       } catch (erro: any) {
         toast.error(erro.message);
       }
@@ -59,7 +59,7 @@ export const FormStateCadCestasBasicas = ({
     }
   };
 
-  const loadBasicBasket = async () =>{
+  const loadBasicBasket = async () => {
     const { idUser } = await userAuthenticator.getUserSession();
     const retorno = await registrationBasicBasket.get(
       idUser,
@@ -71,10 +71,9 @@ export const FormStateCadCestasBasicas = ({
 
     setDataCestasBasicas(retorno);
 
-    if(!retorno.produtos?.length) return
+    if (!retorno.produtos?.length) return
     setDataProducts(retorno.produtos)
   }
-
 
   const handleExecute = async () => {
     try {
@@ -83,7 +82,10 @@ export const FormStateCadCestasBasicas = ({
       const retorno = await registrationBasicBasket.save(
         idUser,
         idConferencia,
-        dataCestasBasicas
+        {
+          ...dataCestasBasicas,
+          produtos: dataProducts
+        }
       );
       if (!retorno)
         toast.error(
@@ -120,15 +122,41 @@ export const FormStateCadCestasBasicas = ({
     });
   };
 
-  // ARRUMAR ESSE AIIIIIIII
-  const addProduct = (product: any, quantity: number = 0)=> {
-    let newValue = dataProducts
-    newValue?.push({
-      ...product,
-      quantity
+  const addProduct = (product: any, quantity: number = 0) => {
+
+    if (quantity === 0) { 
+      toast.error('Quantidade inválida') 
+      return 
+    }
+
+    let newValue: Array<any> = []
+    let newListProducts = dataProducts.filter((item) => item.id !== product.id)
+
+    dataProducts.map((item) => {
+      if (item.id === product.id) {
+        newValue.push({
+          ...item,
+          quantity: (item.quantity + quantity)
+        })
+      }
     })
 
-    setDataProducts(newValue)
+    if (newValue.length)
+      newListProducts = [
+        ...newListProducts,
+        newValue[0]
+      ]
+    else
+      newListProducts = [
+        ...newListProducts,
+        {
+          ...product,
+          quantity
+        }
+      ]
+
+    setDataProducts(newListProducts)
+    setSelectedQuantity(0)
   }
 
   const removeProduct = (value: any) => {
@@ -183,46 +211,46 @@ export const FormStateCadCestasBasicas = ({
             <Col lg={12} md={24} className="colum-card">
               <Card title="Produtos" bordered={false}>
                 <Skeleton loading={isFormLoading} active>
-                    <Row>
-                      <Col lg={16} md={24}>
-                        <Form.Item label="Produto">
-                          <Select
-                            placeholder="Selecione..."
-                            value={selectedProduct.id}
-                            onChange={(e, { children, measure}: any) =>
-                              setSelectedProduct(e ? {
-                                id: e.toString(),
-                                description: children,
-                                measure
-                              } : {id: '', description: '', measure: ''})
-                            }
-                          >
-                            {generateOptions(infosProducts)}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col lg={4} md={24}>
-                        <Form.Item label="Quantidade">
-                          <Input
-                            id="quantity"
-                            name="quantity"
-                            type="number"
-                            value={selectedQuantity}
-                            readOnly={isSaveLoading}
-                            onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col lg={4} md={24}>
-                        <Form.Item label=" ">
-                          <Button type="primary" icon={<PlusOutlined />} onClick={() => addProduct(selectedProduct, selectedQuantity)} >
-                            Adicionar
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                    </Row>
                   <Row>
-                    <ListProductsBasket  ListData={dataProducts} removeAction={removeProduct}/>
+                    <Col lg={16} md={24}>
+                      <Form.Item label="Produto">
+                        <Select
+                          placeholder="Selecione..."
+                          value={selectedProduct.id}
+                          onChange={(e, { children, measure }: any) =>
+                            setSelectedProduct(e ? {
+                              id: e.toString(),
+                              description: children,
+                              measure
+                            } : { id: '', description: '', measure: '' })
+                          }
+                        >
+                          {generateOptions(infosProducts)}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col lg={4} md={24}>
+                      <Form.Item label="Quantidade">
+                        <Input
+                          id="quantity"
+                          name="quantity"
+                          type="number"
+                          value={selectedQuantity}
+                          readOnly={isSaveLoading}
+                          onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col lg={4} md={24}>
+                      <Form.Item label=" ">
+                        <Button type="primary" icon={<PlusOutlined />} onClick={() => addProduct(selectedProduct, selectedQuantity)} >
+                          Adicionar
+                        </Button>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <ListProductsBasket ListData={dataProducts} removeAction={removeProduct} />
                   </Row>
                 </Skeleton>
               </Card>

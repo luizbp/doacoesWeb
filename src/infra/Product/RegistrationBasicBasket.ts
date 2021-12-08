@@ -16,20 +16,36 @@ import { LoadLocalStorage } from "../Common/LoadLocalStorage";
 
 export class RegistrationBasicBasket
   implements ControllerRegistrationBasicBasket {
-  async save(id_user: string, id_conferece: string, param: Record<string, any>): Promise<boolean> {
-    throw new Error("Method not implemented.");
-    // const { ClassHelper } = await import("../Common/ClassHelper");
+  async save(id_user: string, tb_basic_basket_id: string, param: ModelTabBasicBasket): Promise<boolean> {
+    // throw new Error("Method not implemented.");
+    const { ClassHelper } = await import("../Common/ClassHelper");
 
-    // if(id_conferece === 'novo'){
-    //   let uuid = UUID.generate()
-    //   id_conferece = uuid;
+    if(tb_basic_basket_id === 'novo'){
+      let uuid = UUID.generate()
+      tb_basic_basket_id = uuid;
 
-    //   // Pegando dados da tabela Entity
-    //   const tabInstitution = new ClassHelper(NameTabInstitution);
-    //   await tabInstitution.upsert({
-    //     id: id_conferece,
-    //   });
-    // }
+      // Pegando dados da tabela Entity
+      const tabBasicBasket = new ClassHelper(NameTabBasicBasket);
+      await tabBasicBasket.insert({
+        id: tb_basic_basket_id,
+        tb_user_id: id_user,
+        description: param.description,
+        identifier: param.identifier,
+        active: param.active
+      });
+    }
+
+    // Pegando dados da tabela Entity
+    const tabBasicBasketProduct = new ClassHelper(NameTabBasicBasketProduct);
+    await tabBasicBasketProduct.insert({
+      id: tb_basic_basket_id,
+      tb_user_id: id_user,
+      description: param.description,
+      identifier: param.identifier,
+      active: param.active
+    });
+
+    
 
     // // Verifica se existe, se não existir coloca um novo
     
@@ -85,7 +101,7 @@ export class RegistrationBasicBasket
     //   city: param.city
     // });
 
-    // return true
+    return true
   }
 
   async get(id_user: string, id_basic_basket: string): Promise<ModelTabBasicBasket> {
@@ -106,11 +122,7 @@ export class RegistrationBasicBasket
 
     const session = new LoadLocalStorage();
     const pInfosProducts = await session.getProducts();
-    
-
     const products = await this.buildProductList(checkFields(resultBasicBasketProduct, []), pInfosProducts)
-    console.log("pInfosProducts => ", pInfosProducts)
-
 
     return {
       id: checkFields(resultBasicBasket[0].id, ''),
