@@ -36,7 +36,6 @@ export class LoadLocalStorage {
     return this.helperSession.get(KEY_PRODUCTS_SESSION);
   };
 
-
   public loadMeasures = async (id_user: string) => {
     //SALVA OS PRODUTOS NO SESSION STORAGE
     const registrationProducts = new RegistrationProducts();

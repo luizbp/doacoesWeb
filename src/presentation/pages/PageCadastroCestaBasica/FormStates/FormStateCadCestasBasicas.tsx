@@ -57,7 +57,14 @@ export const FormStateCadCestasBasicas = ({
       }
       setIsFormLoading(false);
     }
+    loadListProducts()
   };
+
+  const loadListProducts = async () => {
+    const session = new LoadLocalStorage();
+    const pInfosProducts = await session.getProducts();
+    setInfosProducts(pInfosProducts);
+  }
 
   const loadBasicBasket = async () => {
     const { idUser } = await userAuthenticator.getUserSession();
@@ -65,10 +72,6 @@ export const FormStateCadCestasBasicas = ({
       idUser,
       idConferencia
     );
-    const session = new LoadLocalStorage();
-    const pInfosProducts = await session.getProducts();
-    setInfosProducts(pInfosProducts);
-
     setDataCestasBasicas(retorno);
 
     if (!retorno.produtos?.length) return
@@ -93,7 +96,7 @@ export const FormStateCadCestasBasicas = ({
         );
 
       toast.success("Dados Atualizados com sucesso!!");
-      history.go(-1);
+      history.goBack()
     } catch (erro: any) {
       toast.error(erro.message);
     }
@@ -107,7 +110,7 @@ export const FormStateCadCestasBasicas = ({
       buttons: ["Cancelar", true],
     }).then(async (willDelete) => {
       if (willDelete) {
-        history.go(-1);
+        history.goBack();
       }
     });
   };

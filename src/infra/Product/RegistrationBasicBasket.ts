@@ -17,27 +17,16 @@ import { LoadLocalStorage } from "../Common/LoadLocalStorage";
 export class RegistrationBasicBasket
   implements ControllerRegistrationBasicBasket {
   async save(id_user: string, tb_basic_basket_id: string, param: ModelTabBasicBasket): Promise<boolean> {
-    // throw new Error("Method not implemented.");
     const { ClassHelper } = await import("../Common/ClassHelper");
 
     if(tb_basic_basket_id === 'novo'){
       let uuid = UUID.generate()
       tb_basic_basket_id = uuid;
-
-      // Pegando dados da tabela Entity
-      const tabBasicBasket = new ClassHelper(NameTabBasicBasket);
-      await tabBasicBasket.insert({
-        id: tb_basic_basket_id,
-        tb_user_id: id_user,
-        description: param.description,
-        identifier: param.identifier,
-        active: param.active
-      });
     }
 
     // Pegando dados da tabela Entity
-    const tabBasicBasketProduct = new ClassHelper(NameTabBasicBasketProduct);
-    await tabBasicBasketProduct.insert({
+    const tabBasicBasket = new ClassHelper(NameTabBasicBasket);
+    await tabBasicBasket.upsert({
       id: tb_basic_basket_id,
       tb_user_id: id_user,
       description: param.description,
@@ -45,62 +34,25 @@ export class RegistrationBasicBasket
       active: param.active
     });
 
+    if (!param.produtos || !param.produtos.length) return true
+    const productsInsert: any = []
+    param.produtos.forEach((prod) => {
+      productsInsert.push({
+        tb_product_id: prod.id,
+        tb_basic_basket_id,
+        tb_user_id: id_user,
+        quantity: prod.quantity,
+        active: true
+      })
+    })
     
 
-    // // Verifica se existe, se não existir coloca um novo
-    
-
-    // // Pegando dados da tabela Entity
-    // const tabInstitutionHasUser = new ClassHelper(NameTabInstitutionHasUser);
-    // await tabInstitutionHasUser.upsert({
-    //   tb_institution_id: id_conferece,
-    //   tb_user_id: id_user,
-    //   kind: param.name_company,
-    //   active: param.active
-    // });
-
-    // // Pegando dados da tabela Entity
-    // const tabEntity = new ClassHelper(NameTabEntity);
-    // await tabEntity.upsert({
-    //   id: id_conferece,
-    //   name_company: param.name_company,
-    //   nick_trade: param.nick_trade,
-    //   note: param.note,
-    // });
-
-    // // Pegando dados da tabela Mailing
-    // const tabMailing = new ClassHelper(NameTabMailing);
-    // await tabMailing.upsert({
-    //   id: id_conferece,
-    //   email: param.email
-    // });
-
-    // // Pegando dados da tabela Mailing
-    // const tabPhone = new ClassHelper(NameTabPhone);
-    // await tabPhone.upsert({
-    //   id: id_conferece,
-    //   kind: param.kind_phone,
-    //   contact: param.contact,
-    //   number: param.number,
-    // });
-
-    // // Pegando dados da tabela Mailing
-    // const tabAddress = new ClassHelper(NameTabAddress);
-    // await tabAddress.upsert({
-    //   id: id_conferece,
-    //   kind: param.kind_address,
-    //   address: param.address,
-    //   nmbr: param.nmbr,
-    //   complement: param.complement,
-    //   region: param.region,
-    //   zip_code: param.zip_code,
-    //   country: param.country,
-    //   opening_hours: param.opening_hours,
-    //   link_map: param.link_map,
-    //   state: param.state,
-    //   city: param.city
-    // });
-
+    // Pegando dados da tabela Entity
+    const tabBasicBasketProduct = new ClassHelper(NameTabBasicBasketProduct);
+    await tabBasicBasketProduct.delete({
+      tb_basic_basket_id
+    })
+    await tabBasicBasketProduct.insertInBulk(productsInsert);
     return true
   }
 
