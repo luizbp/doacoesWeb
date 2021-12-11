@@ -61,6 +61,34 @@ export class ClassHelper implements ControllerClassHelper {
       ...data[0],
     };
   }
+
+  async insertInBulk(param: Array<Record<string, any>>): Promise<ModelClassHelper> {
+    this.validations("insert", param);
+
+    const { data, error } = await supabase
+      .from(this.pNameTable)
+      .upsert(param);
+
+    if (error) {
+      console.error({
+        message: `Erro => ${error.message}`,
+        origin: "ClassHelper => insertInBulk",
+      });
+      throw new Error(
+        "Ocorreu um erro desconhecido, por favor contacte o suporte"
+      );
+    }
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na inserção em massa dos dados, contacte o suporte"
+      );
+
+    return {
+      ...data[0],
+    };
+  }
+
   async update(param: ModelClassHelper): Promise<ModelClassHelper> {
     // Faz todas as validações de UPDATE
     this.validations("update", param);
@@ -93,12 +121,40 @@ export class ClassHelper implements ControllerClassHelper {
       ...data[0],
     };
   }
+
   async select(
     param?: Record<string, unknown>
   ): Promise<ModelClassHelper | any> {
     const { data, error } = await supabase
       .from(this.pNameTable)
       .select()
+      .match(param ? param : {});
+
+    if (error) {
+      console.error({
+        message: `Erro => ${error.message}`,
+        origin: "ClassHelper => select",
+      });
+      throw new Error(
+        "Ocorreu um erro desconhecido, por favor contacte o suporte"
+      );
+    }
+
+    if (!data)
+      throw new Error(
+        "Ocorreu um problema na busca dos dados, contacte o suporte"
+      );
+
+    return data;
+  }
+
+  async selectGraphQL(
+    param?: Record<string, unknown>,
+    query?: string
+  ): Promise<ModelClassHelper | any> {
+    const { data, error } = await supabase
+      .from(this.pNameTable)
+      .select(query ? query : '')
       .match(param ? param : {});
 
     if (error) {
@@ -154,6 +210,7 @@ export class ClassHelper implements ControllerClassHelper {
 
     return data;
   }
+
   async delete(id: Record<string, any>): Promise<boolean> {
     // Faz todas as validações de UPDATE
     this.validations("delete", null, id);
@@ -178,6 +235,7 @@ export class ClassHelper implements ControllerClassHelper {
 
     return true;
   }
+
   async upsert(param: ModelClassHelper): Promise<ModelClassHelper> {
     // Faz todas as validações de UPDATE
     this.validations("upsert", param);
