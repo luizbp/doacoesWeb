@@ -1,5 +1,5 @@
 import logoImg from "../../assets/images/logo_light.svg";
-import { UserOutlined } from "@ant-design/icons";
+import { DropboxOutlined, UserOutlined } from "@ant-design/icons";
 
 import { Layout, Menu } from "antd";
 import { useHistory, Link} from "react-router-dom";
@@ -34,6 +34,12 @@ export const CustomMenu = () => {
             <Menu.Item key="configuracao_de_conta">Configurações</Menu.Item>
             <Menu.Item key="cadastro_conferencia">Cadastro de conferencia</Menu.Item>
           </SubMenu>
+          <Menu.Item key="cadastro_produtos" icon={<DropboxOutlined />}>
+              Cadastro de produtos
+          </Menu.Item>
+          <Menu.Item key="cadastro_cesta_basica" icon={<DropboxOutlined />}>
+              Cadastro de cestas básicas
+          </Menu.Item>
         </Menu>
       </Sider>
     </>

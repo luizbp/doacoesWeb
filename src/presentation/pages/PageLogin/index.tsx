@@ -27,7 +27,7 @@ export function PageLogin(
 
   const checkLoggedUser = async () => {
     try {
-      const requestSession = await userAuthenticator.checkSession();
+      const requestSession = userAuthenticator.checkSession();
 
       if (requestSession.isLogged) history.push("/home");
     } catch (error) {

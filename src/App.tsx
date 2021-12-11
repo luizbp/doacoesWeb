@@ -7,6 +7,8 @@ import { PrivateRoute } from "./utils/PrivateRoute"
 
 
 import "antd/dist/antd.css";
+import { PageCadastroProdutosFactory } from "./main/factories/pages/PageCadastroProdutos";
+import { PageCadastroCestaBasicaFactory } from "./main/factories/pages/PageCadastroCestaBasica";
 
 function App() {
   return (
@@ -25,6 +27,22 @@ function App() {
         <PrivateRoute
           path="/cadastro_conferencia/:idRegistry"
           component={PageCadastroConferenciaFactory}
+        />
+        <PrivateRoute
+          path="/cadastro_produtos" exact
+          component={PageCadastroProdutosFactory}
+        />
+        <PrivateRoute
+          path="/cadastro_produtos/:idRegistry"
+          component={PageCadastroProdutosFactory}
+        />
+        <PrivateRoute
+          path="/cadastro_cesta_basica" exact
+          component={PageCadastroCestaBasicaFactory}
+        />
+        <PrivateRoute
+          path="/cadastro_cesta_basica/:idRegistry"
+          component={PageCadastroCestaBasicaFactory}
         />
         <Route path="/:pStateForm" component={PageLoginFactory} />
       </Switch>

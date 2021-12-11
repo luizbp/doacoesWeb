@@ -11,7 +11,7 @@ import { ModelTabMailing } from "../../domain/Common/models/ModelTabMailing";
 
 export class RegistrationUser implements ControllerRegistrationUser {
   async save(param: ModelRegistrationUser): Promise<boolean> {
-    const { ClassHelper } = await import("./ClassHelper");
+    const { ClassHelper } = await import("../Common/ClassHelper");
 
     const tabCompany = new ClassHelper(NameTabCompany);
     const dataCompany: ModelTabCompany = {
@@ -43,7 +43,7 @@ export class RegistrationUser implements ControllerRegistrationUser {
   }
 
   async get(id: string): Promise<ModelRegistrationUser> {
-    const { ClassHelper } = await import("./ClassHelper");
+    const { ClassHelper } = await import("../Common/ClassHelper");
 
     // Pegando dados da tabela Company
     const tabCompany = new ClassHelper(NameTabCompany);
